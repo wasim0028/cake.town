@@ -8,9 +8,7 @@ router.use(cookieParser())
 
 const User = require("../models/schema")
 
-router.get("/", (req, res) => {
-    res.send("Hello form other side router j ")
-})
+
 
 // using promises
 // router.post('/register', (req,res) =>{

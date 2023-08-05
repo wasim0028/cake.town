@@ -13,13 +13,7 @@ app.use(require('./router/auth'))
 
 app.use(cookieParser())
 
-app.get("/", (req,res)=>{
-    res.send("Hellow form other side")
-})
 
-app.get("/about", (req,res)=>{
-    res.send("Hello form other side")
-})
 
 if(process.env.NODE_ENV =="production"){
     app.use(express.static("client/build"))
