@@ -1,0 +1,103 @@
+.container_Box{
+    background: var(--color-bg1);
+    padding: 4rem;
+    display: grid;
+    grid-template-columns: 40% 60%;
+    gap: 8rem;
+    height: 45rem;
+    margin: 7rem auto;
+    border-radius: 1rem;
+}
+
+ .Box_aside{
+   /* background: var(--color-primary);   */
+   background: linear-gradient(135deg, #9a1ccc ,#71b7e6);  
+   padding: 6rem;
+   border-radius: 1rem;
+   position: relative;
+   bottom: 5rem;
+}
+
+ /* img{
+    width: 30rem;
+    /* margin-bottom: 2rem; 
+} */
+
+.Box_aside h2{
+    text-align: left;
+    margin-bottom: 1rem;
+}
+
+.Box_form{
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-right: 4rem;
+}
+
+
+.input-box{
+    width: 50%;
+}
+
+input{
+    width: 100%;
+    padding: 1rem;
+    background: var(--color-bg);
+    color: var(--color-white);
+}
+
+.Box_form .buttons{
+    width: min-content;
+    margin-top: 1rem;
+    cursor: pointer;
+}
+
+.buttons input:hover{
+    background: linear-gradient(135deg, #9a1ccc ,#71b7e6);
+}
+
+
+@media screen and (max-width: 1024px) { 
+    .container_Box{
+        gap: 1.5rem;
+        margin-top: 3rem;
+        height: auto;
+        padding: 1.5rem;
+        margin-top: 7rem;
+    }
+    
+    .Box_aside{
+        width: auto;
+        padding: 1.5rem;
+        bottom: 0;
+    }
+    
+    .Box_form{
+        align-self: center;
+        margin-right: 1.5rem;
+    }
+}
+
+
+@media screen and (max-width: 600px) {
+    .container_Box{
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        margin-top: 6rem;
+        padding: 0;
+
+    }
+
+    .Box_form{
+        margin: 0 1.5rem 3rem;
+    }
+
+    .Box_form{
+        flex-direction: column;
+    }
+
+    .user-details input[type="text"]{
+        width: 100%;
+    }
+}
