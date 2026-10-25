@@ -6,6 +6,11 @@ import { toJSONPlugin } from "./plugins";
  * Order items and the address are SNAPSHOTS: they copy name, price and options at the time of
  * purchase so later product edits never change past orders.
  */
+const customSchema = new mongoose.Schema(
+  { shape: String, frosting: String, toppings: { type: [String], default: undefined } },
+  { _id: false },
+);
+
 const orderItemSchema = new mongoose.Schema(
   {
     product: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
@@ -19,6 +24,8 @@ const orderItemSchema = new mongoose.Schema(
     flavour: String,
     eggless: { type: Boolean, default: false },
     message: String,
+    custom: { type: customSchema, default: undefined },
+    customSummary: String,
     lineTotal: { type: Number, required: true },
   },
   { _id: false },

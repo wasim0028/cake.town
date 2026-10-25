@@ -1,12 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Clock, EggOff, Truck } from "lucide-react";
-import { DELIVERY, formatINR, type BakingClass, type Category, type Product } from "@caketown/shared";
+import { DELIVERY, formatINR, type BakingClass, type Category, type Product, type Review } from "@caketown/shared";
 import { CategoryArt } from "@/components/art/BakeArt";
 import { Reveal } from "@/components/layout/Reveal";
 import { ProductPlate } from "@/components/product/ProductPlate";
 import { Button } from "@/components/ui/Button";
 import { SectionHeading } from "@/components/ui/primitives";
+import { Stars } from "@/components/ui/form";
 import styles from "./Sections.module.css";
 
 /* ---------- three facts people ask about first ---------- */
@@ -152,6 +153,41 @@ export function Kitchen({ classes }: { classes: BakingClass[] }) {
             See all classes
           </Button>
         </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- what customers say (real reviews from the API) ---------- */
+
+export function Testimonials({ reviews }: { reviews: Review[] }) {
+  if (reviews.length < 2) return null;
+  return (
+    <section className={`section ${styles.testimonials}`} aria-labelledby="testimonials">
+      <div className="container">
+        <SectionHeading id="testimonials" title="From people who ordered" />
+        <Reveal as="ul" role="list" className={styles.quotes}>
+          {reviews.slice(0, 3).map((r) => (
+            <li key={r.id} data-reveal-item className={styles.quote}>
+              <Stars value={r.rating} />
+              <blockquote>
+                <p>{r.comment}</p>
+              </blockquote>
+              <p className={styles.quoteBy}>
+                {r.user.name}
+                {r.product && (
+                  <>
+                    {" "}
+                    on{" "}
+                    <Link href={`/product/${r.product.slug}`} className="text-link">
+                      {r.product.name}
+                    </Link>
+                  </>
+                )}
+              </p>
+            </li>
+          ))}
+        </Reveal>
       </div>
     </section>
   );

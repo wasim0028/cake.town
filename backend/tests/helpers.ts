@@ -113,3 +113,17 @@ export const address = {
   state: "Karnataka",
   pincode: "560001",
 };
+
+export async function seedCustomCake(categoryId: unknown) {
+  return new Product({
+    name: "Design Your Own Cake",
+    slug: `design-your-own-${unique()}`,
+    category: categoryId,
+    variants: [{ label: "1 kg", price: 119900, stock: 10 }],
+    flavours: ["Vanilla", "Chocolate"],
+    egglessOption: { available: true, extraPrice: 6000 },
+    allowsMessage: true,
+    preparationHours: 24,
+    isCustomizable: true,
+  }).save();
+}

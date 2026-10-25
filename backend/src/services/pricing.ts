@@ -1,14 +1,16 @@
-import { DELIVERY, TIMEZONE } from "@caketown/shared";
+import { customCakeExtra, DELIVERY, TIMEZONE, type CakeCustomization } from "@caketown/shared";
 import { Coupon, Order, type CouponDoc } from "../models";
 
 /** Price of one unit of a variant, including the eggless surcharge when chosen. */
 export function unitPrice(
   variant: { price: number },
-  product: { egglessOption?: { available?: boolean | null; extraPrice?: number | null } | null },
+  product: { egglessOption?: { available?: boolean | null; extraPrice?: number | null } | null; isCustomizable?: boolean | null },
   eggless: boolean,
+  custom?: CakeCustomization | null,
 ): number {
   const extra = eggless && product.egglessOption?.available ? (product.egglessOption.extraPrice ?? 0) : 0;
-  return variant.price + extra;
+  const builder = product.isCustomizable ? customCakeExtra(custom) : 0;
+  return variant.price + extra + builder;
 }
 
 export function deliveryFeeFor(subtotal: number): number {

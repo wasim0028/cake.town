@@ -6,7 +6,7 @@ Fresh baked happiness, delivered. A bakery shop with a web app, a mobile app and
 |---|---|---|
 | `backend/` | Express 5 + TypeScript + MongoDB API | ✅ Phase A |
 | `packages/shared/` | Types, zod schemas, constants and money helpers used by all apps | ✅ Phase A |
-| `client/` | Next.js web app | ✅ Phase B foundation · ⏳ Phase C pages |
+| `client/` | Next.js web app | ✅ Phases B–C |
 | `mobile/` | Expo (React Native) app | ⏳ Phase D |
 | `legacy/` | The original Express server and React app, kept for reference | — |
 
@@ -23,7 +23,7 @@ cp client/.env.example client/.env.local
 npm run seed                             # sample catalogue + admin user
 npm run dev:api                          # API → http://localhost:5000/health
 npm run dev:web                          # in a second terminal → http://localhost:3000
-npm test                                 # 47 API tests
+npm test                                 # 52 API tests
 ```
 
 Every external service is optional and switches on when its keys are added to `backend/.env`.
@@ -41,7 +41,10 @@ Point `MONGODB_URI` at the existing database and run `npm run migrate:users` onc
   admin API, Cloudinary uploads, Redis cache and rate limits, email/SMS/push notifications, tests.
 - **B. Web foundation** ✅ Next.js, design tokens, self-hosted fonts, product illustrations, navbar,
   footer, cart drawer, dark mode, page transitions, smooth scroll, custom cursor, home page on live data.
-- **C. Web pages:** home, shop, product, cake builder, cart, checkout, tracking, classes, account, 404.
+- **C. Web pages** ✅ shop with search and filters, product pages with reviews, cake designer with live
+  preview, sign-up/login/password reset, checkout (saved addresses, delivery slots, coupons, COD and
+  Razorpay), live order tracking, account (profile, orders, favourites, addresses, classes), class
+  booking, about, contact, help, recipes, privacy, terms, sitemap.
 - **D. Mobile app:** Expo screens, gestures, haptics, push notifications.
 - **E. Admin dashboard + notification flows.**
 - **F. Polish:** SEO, accessibility, Lighthouse, deployment guide.

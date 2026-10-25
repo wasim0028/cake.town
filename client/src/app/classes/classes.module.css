@@ -1,0 +1,72 @@
+.photo img {
+  width: 100%;
+  height: clamp(220px, 32vw, 420px);
+  object-fit: cover;
+  object-position: 50% 40%;
+  border-radius: var(--r-lg);
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-5);
+  list-style: none;
+  padding: 0;
+}
+.detail {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: clamp(var(--s-6), 5vw, var(--s-9));
+  align-items: start;
+  padding-bottom: var(--s-9);
+}
+.body {
+  display: grid;
+  gap: var(--s-5);
+}
+.body h2 {
+  font-size: var(--step-2);
+}
+.learn {
+  display: grid;
+  gap: var(--s-2);
+  padding-left: 1.2em;
+}
+.learn li::marker {
+  color: var(--accent);
+}
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2) var(--s-5);
+  color: var(--text-muted);
+}
+.facts strong {
+  color: var(--text);
+}
+.teacher {
+  display: flex;
+  gap: var(--s-4);
+  align-items: center;
+  padding: var(--s-4);
+  border-radius: var(--r-lg);
+  background: var(--plate);
+}
+.teacherAvatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--caramel);
+  color: var(--cocoa);
+  font-family: var(--font-display-stack);
+  font-size: var(--step-2);
+  font-weight: 600;
+}
+@media (max-width: 860px) {
+  .grid,
+  .detail {
+    grid-template-columns: 1fr;
+  }
+}

@@ -28,6 +28,7 @@ interface ProductLike {
   tags: string[];
   isBestseller: boolean;
   isFeatured: boolean;
+  isCustomizable?: boolean;
   isActive?: boolean;
   lowStockThreshold?: number;
   priceFrom: number;
@@ -73,6 +74,7 @@ export function presentProduct(p: ProductLike, opts: { admin?: boolean } = {}) {
     tags: p.tags,
     isBestseller: p.isBestseller,
     isFeatured: p.isFeatured,
+    isCustomizable: Boolean(p.isCustomizable),
     priceFrom: p.priceFrom,
     rating: { average: Math.round((p.rating?.average ?? 0) * 10) / 10, count: p.rating?.count ?? 0 },
   };

@@ -25,8 +25,9 @@ describe("public catalogue", () => {
     const byCat = await api().get(`/api/v1/products?category=${data.cookies.slug}`);
     expect(byCat.body.items.map((p: { name: string }) => p.name)).toEqual(["Nankhatai"]);
 
+    // Nankhatai is eggless; the truffle cake can be made eggless on request.
     const eggless = await api().get("/api/v1/products?dietary=eggless");
-    expect(eggless.body.items).toHaveLength(1);
+    expect(eggless.body.items.map((p: { name: string }) => p.name).sort()).toEqual(["Chocolate Truffle Cake", "Nankhatai"]);
 
     const cheap = await api().get("/api/v1/products?maxPrice=30000");
     expect(cheap.body.items.map((p: { name: string }) => p.name)).toEqual(["Nankhatai"]);

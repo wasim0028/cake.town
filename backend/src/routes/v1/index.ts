@@ -40,6 +40,7 @@ v1.use("/auth", a);
 /* ---------- catalogue (public) ---------- */
 v1.get("/categories", catalog.listCategories);
 v1.get("/products", catalog.listProducts);
+v1.get("/reviews/latest", catalog.latestReviews);
 v1.get("/products/:slug", catalog.getProduct);
 v1.get("/products/:slug/related", catalog.relatedProducts);
 v1.get("/products/:slug/reviews", catalog.listReviews);
@@ -51,6 +52,7 @@ const cart = Router();
 cart.use(requireAuth);
 cart.get("/", commerce.getCart);
 cart.post("/items", commerce.addCartItem);
+cart.put("/", commerce.replaceCart);
 cart.patch("/items/:itemId", commerce.updateCartItem);
 cart.delete("/items/:itemId", commerce.removeCartItem);
 cart.delete("/", commerce.clearCart);
@@ -94,6 +96,7 @@ v1.post("/bookings", requireAuth, checkoutLimiter, classes.bookClass);
 v1.post("/bookings/:id/cancel", requireAuth, classes.cancelMyBooking);
 
 /* ---------- misc ---------- */
+v1.get("/config", misc.publicConfig);
 v1.post("/contact", formLimiter, optionalAuth, misc.contact);
 v1.post("/newsletter", formLimiter, misc.subscribe);
 

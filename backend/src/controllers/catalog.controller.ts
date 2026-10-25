@@ -84,7 +84,12 @@ async function buildProductFilter(q: ProductQuery): Promise<FilterQuery<ProductF
     if (!cat) return null;
     filter.category = cat._id;
   }
-  if (q.dietary?.length) filter.dietary = { $all: q.dietary };
+  if (q.dietary?.length) {
+    // "Eggless" also matches cakes that can be made eggless on request.
+    const rest = q.dietary.filter((d) => d !== "eggless");
+    if (rest.length) filter.dietary = { $all: rest };
+    if (q.dietary.includes("eggless")) filter.$or = [{ dietary: "eggless" }, { "egglessOption.available": true }];
+  }
   if (q.minPrice !== undefined || q.maxPrice !== undefined) {
     filter.priceFrom = {
       ...(q.minPrice !== undefined ? { $gte: q.minPrice } : {}),
@@ -159,7 +164,7 @@ async function recomputeRating(productId: mongoose.Types.ObjectId | string) {
     { $group: { _id: null, avg: { $avg: "$rating" }, count: { $sum: 1 } } },
   ]);
   await Product.updateOne({ _id: productId }, { $set: { "rating.average": stats?.avg ?? 0, "rating.count": stats?.count ?? 0 } });
-  await invalidateCatalog();
+  await Promise.all([invalidateCatalog(), cache.delPrefix("reviews:")]);
 }
 
 export async function listReviews(req: Request, res: Response) {
@@ -190,6 +195,36 @@ export async function listReviews(req: Request, res: Response) {
 function shortName(name: string) {
   const [first, last] = name.trim().split(/\s+/);
   return last ? `${first} ${last[0]}.` : (first ?? "Customer");
+}
+
+/** Recent 4–5 star reviews with a written comment, for the home page. */
+export async function latestReviews(req: Request, res: Response) {
+  const limit = Math.min(12, Math.max(1, Number(req.query.limit) || 6));
+  const items = await cache.wrap(`reviews:latest:${limit}`, 300, async () => {
+    const reviews = await Review.find({ isHidden: false, rating: { $gte: 4 }, comment: { $ne: "" } })
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .populate("user", "name avatar")
+      .populate("product", "name slug isActive")
+      .lean();
+    return reviews
+      .filter((r) => (r.product as unknown as { isActive?: boolean } | null)?.isActive)
+      .map((r) => {
+        const u = r.user as unknown as { _id: unknown; name: string } | null;
+        const p = r.product as unknown as { name: string; slug: string };
+        return {
+          id: String(r._id),
+          user: { id: u ? String(u._id) : "", name: u ? shortName(u.name) : "Customer" },
+          product: { name: p.name, slug: p.slug },
+          rating: r.rating,
+          ...(r.title ? { title: r.title } : {}),
+          comment: r.comment,
+          verifiedPurchase: r.verifiedPurchase,
+          createdAt: r.createdAt.toISOString(),
+        };
+      });
+  });
+  res.json({ items });
 }
 
 export async function upsertReview(req: Request, res: Response) {

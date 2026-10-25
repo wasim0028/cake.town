@@ -1,6 +1,11 @@
 import mongoose, { type InferSchemaType } from "mongoose";
 import { toJSONPlugin } from "./plugins";
 
+const customSchema = new mongoose.Schema(
+  { shape: String, frosting: String, toppings: { type: [String], default: undefined } },
+  { _id: false },
+);
+
 const cartItemSchema = new mongoose.Schema({
   product: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
   variantId: { type: mongoose.Schema.Types.ObjectId, required: true },
@@ -8,6 +13,7 @@ const cartItemSchema = new mongoose.Schema({
   flavour: String,
   eggless: { type: Boolean, default: false },
   message: String,
+  custom: { type: customSchema, default: undefined },
 });
 
 const cartSchema = new mongoose.Schema(

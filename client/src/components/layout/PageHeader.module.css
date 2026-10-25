@@ -1,0 +1,43 @@
+.header {
+  padding-top: clamp(var(--s-6), 5vw, var(--s-8));
+  padding-bottom: clamp(var(--s-5), 4vw, var(--s-7));
+}
+.header[data-compact] {
+  padding-bottom: var(--s-5);
+}
+
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  list-style: none;
+  padding: 0;
+  margin-bottom: var(--s-4);
+  font-size: var(--step--1);
+  color: var(--text-muted);
+}
+.crumbs li + li::before {
+  content: "/";
+  margin-right: var(--s-2);
+  color: var(--line-strong);
+}
+.crumbs a:hover {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.crumbs [aria-current] {
+  color: var(--text);
+}
+
+.title {
+  font-size: var(--step-5);
+  max-width: 20ch;
+}
+.intro {
+  margin-top: var(--s-4);
+  font-size: var(--step-1);
+  line-height: 1.5;
+  color: var(--text-muted);
+  max-width: 52ch;
+}

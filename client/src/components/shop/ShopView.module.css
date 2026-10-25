@@ -1,0 +1,211 @@
+.shop {
+  padding-bottom: var(--s-9);
+}
+
+.toolbar {
+  display: flex;
+  gap: var(--s-3);
+  align-items: center;
+}
+
+.searchBox {
+  position: relative;
+  flex: 1;
+}
+.searchIcon {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+.search {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 var(--s-7) 0 48px;
+  border-radius: var(--r-pill);
+  border: 1.5px solid var(--line-strong);
+  background: var(--surface);
+  transition: border-color var(--t-fast), box-shadow var(--t-fast);
+}
+.search:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgb(200 137 59 / 0.2);
+}
+.search::-webkit-search-cancel-button {
+  display: none;
+}
+.clearSearch {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  color: var(--text-muted);
+}
+.clearSearch:hover {
+  background: var(--plate);
+  color: var(--text);
+}
+
+.sort select {
+  appearance: none;
+  min-height: 52px;
+  padding: 0 var(--s-7) 0 var(--s-5);
+  border-radius: var(--r-pill);
+  border: 1.5px solid var(--line-strong);
+  background: var(--surface)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236F6158' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")
+    no-repeat right 16px center;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.filters {
+  display: grid;
+  gap: var(--s-3);
+  margin-top: var(--s-5);
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2);
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 var(--s-4);
+  border-radius: var(--r-pill);
+  border: 1.5px solid transparent;
+  background: var(--plate);
+  font-size: 0.93rem;
+  font-weight: 550;
+  white-space: nowrap;
+  transition: background-color var(--t-fast), color var(--t-fast), border-color var(--t-fast), transform var(--t-fast) var(--ease-spring);
+}
+.pill:hover {
+  border-color: var(--line-strong);
+}
+.pill:active {
+  transform: scale(0.96);
+}
+.pill[aria-current="page"],
+.pill[aria-pressed="true"] {
+  background: var(--text);
+  color: var(--bg);
+}
+.pill[data-variant="soft"] {
+  background: transparent;
+  border-color: var(--line-strong);
+}
+.pill[data-variant="soft"][aria-pressed="true"] {
+  background: var(--tag-fresh-bg);
+  color: var(--tag-fresh-text);
+  border-color: var(--tag-fresh-text);
+}
+.divider {
+  width: 1px;
+  height: 24px;
+  background: var(--line-strong);
+  margin-inline: var(--s-1);
+}
+@media (max-width: 720px) {
+  .toolbar {
+    flex-wrap: wrap;
+  }
+  .searchBox {
+    flex-basis: 100%;
+  }
+  .sort {
+    flex: 1;
+  }
+  .sort select {
+    width: 100%;
+  }
+  .row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    scrollbar-width: none;
+  }
+}
+
+.status {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--s-4);
+  margin: var(--s-6) 0 var(--s-5);
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--s-8) var(--s-6);
+}
+@media (max-width: 1080px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 720px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-6) var(--s-4);
+  }
+}
+
+/* New results arrive with a short staggered rise. */
+.cell {
+  animation: rise-in 520ms var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 40ms);
+}
+
+.skeleton {
+  display: grid;
+  gap: var(--s-3);
+}
+.skeletonPlate {
+  aspect-ratio: 1;
+  width: 100%;
+  height: auto;
+  margin-bottom: var(--s-2);
+}
+
+.empty {
+  display: grid;
+  justify-items: start;
+  gap: var(--s-3);
+  padding: var(--s-8) var(--s-6);
+  border: 1.5px dashed var(--line-strong);
+  border-radius: var(--r-lg);
+}
+.emptyTitle {
+  font-family: var(--font-display-stack);
+  font-variation-settings: "SOFT" 100;
+  font-size: var(--step-2);
+  font-weight: 560;
+}
+.emptyActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  margin-top: var(--s-2);
+}
+
+.more {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--s-8);
+}

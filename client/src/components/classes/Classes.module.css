@@ -1,0 +1,96 @@
+.panel {
+  position: sticky;
+  top: calc(var(--nav-h) + var(--s-4));
+  display: grid;
+  gap: var(--s-4);
+  padding: var(--s-5);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-1);
+}
+.panelTitle {
+  font-family: var(--font-display-stack);
+  font-variation-settings: "SOFT" 100;
+  font-size: var(--step-3);
+  font-weight: 600;
+}
+.seatsRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.seatsLabel {
+  font-weight: 600;
+}
+
+.classCard {
+  display: grid;
+  gap: var(--s-3);
+  align-content: start;
+  height: 100%;
+  padding: var(--s-6);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  transition: transform var(--t-med) var(--ease-out), box-shadow var(--t-med), border-color var(--t-fast);
+}
+.classCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-2);
+  border-color: var(--line-strong);
+}
+.level {
+  justify-self: start;
+  padding: 0.15em 0.7em;
+  border-radius: var(--r-pill);
+  font-size: 0.8rem;
+  font-weight: 650;
+  text-transform: capitalize;
+  background: var(--tag-fresh-bg);
+  color: var(--tag-fresh-text);
+}
+.level[data-level="intermediate"] {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  color: var(--accent-display);
+}
+.level[data-level="advanced"] {
+  background: var(--text);
+  color: var(--bg);
+}
+.classTitle {
+  font-size: var(--step-2);
+}
+.classMeta {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: var(--s-4);
+  justify-content: start;
+  padding-block: var(--s-3);
+  border-block: 1px solid var(--line);
+  font-size: 0.93rem;
+}
+.classMeta dt {
+  font-size: var(--step--1);
+  color: var(--text-muted);
+}
+.classMeta dd {
+  font-weight: 600;
+}
+.classFoot {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s-3);
+  flex-wrap: wrap;
+  font-size: var(--step--1);
+  color: var(--text-muted);
+}
+.few {
+  color: var(--accent-display);
+  font-weight: 650;
+}
+@media (max-width: 860px) {
+  .panel {
+    position: static;
+  }
+}

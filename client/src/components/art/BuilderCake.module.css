@@ -1,0 +1,77 @@
+.svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* Changing the shape or sponge "drops" the cake back on the board. */
+.body {
+  animation: settle 600ms var(--ease-spring) both;
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+@keyframes settle {
+  from {
+    transform: translateY(-18px) scaleY(1.06);
+    opacity: 0.4;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* New frosting pours on. */
+.frosting {
+  animation: pour 520ms var(--ease-out) both;
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+}
+@keyframes pour {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* Toppings are dropped on with a little bounce. */
+.topping > * {
+  animation: plop 520ms var(--ease-spring) both;
+}
+.topping > *:nth-child(2) { animation-delay: 60ms; }
+.topping > *:nth-child(3) { animation-delay: 120ms; }
+.topping > *:nth-child(4) { animation-delay: 180ms; }
+.topping > *:nth-child(5) { animation-delay: 240ms; }
+@keyframes plop {
+  from {
+    transform: translateY(-40px);
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.message {
+  font-family: var(--font-display-stack);
+  font-variation-settings: "SOFT" 100, "WONK" 1;
+  font-weight: 600;
+  font-size: 22px;
+  letter-spacing: 0.01em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .body,
+  .frosting,
+  .topping > * {
+    animation: none;
+  }
+}

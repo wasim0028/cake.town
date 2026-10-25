@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 import type { ClientSession } from "mongoose";
-import { ORDER_TRANSITIONS, type CheckoutInput, type OrderStatus } from "@caketown/shared";
+import { describeCustomization, ORDER_TRANSITIONS, type CheckoutInput, type OrderStatus } from "@caketown/shared";
 import { env, features } from "../config/env";
 import { logger } from "../config/logger";
 import { withTransaction } from "../config/db";
@@ -88,6 +88,7 @@ export async function placeOrder(userId: string, input: CheckoutInput) {
       flavour: raw.flavour ?? undefined,
       eggless: raw.eggless,
       message: raw.message ?? undefined,
+      ...(line.custom ? { custom: line.custom, customSummary: describeCustomization(line.custom) } : {}),
       lineTotal: line.lineTotal,
     };
   });

@@ -88,6 +88,12 @@ export function ProductPlate({ product, priority = false }: { product: Product; 
             </span>
           )}
         </button>
+        {product.isCustomizable ? (
+          <Link href="/cake-builder" className={styles.add} aria-label={`Design your cake with ${product.name}`}>
+            <Plus size={20} />
+            <span>Design</span>
+          </Link>
+        ) : (
         <button
           type="button"
           className={styles.add}
@@ -98,6 +104,7 @@ export function ProductPlate({ product, priority = false }: { product: Product; 
           <Plus size={20} />
           <span>{variant ? "Add" : "Sold out"}</span>
         </button>
+        )}
       </div>
 
       <div className={styles.body}>

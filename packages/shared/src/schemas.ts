@@ -11,6 +11,7 @@ import {
   PRODUCT_SORTS,
   ROLES,
 } from "./constants";
+import { CAKE_FROSTINGS, CAKE_SHAPES, CAKE_TOPPINGS, MAX_TOPPINGS } from "./builder";
 
 /* ---------- building blocks ---------- */
 
@@ -122,6 +123,7 @@ export const productInputSchema = z.object({
   isBestseller: z.boolean().default(false),
   isFeatured: z.boolean().default(false),
   isActive: z.boolean().default(true),
+  isCustomizable: z.boolean().default(false),
   lowStockThreshold: z.number().int().min(0).default(5),
 });
 export const productUpdateSchema = productInputSchema.partial();
@@ -168,6 +170,19 @@ export const addressUpdateSchema = addressInputSchema.partial();
 
 /* ---------- cart & checkout ---------- */
 
+const ids = <T extends readonly { id: string }[]>(list: T) => list.map((x) => x.id) as unknown as [T[number]["id"], ...T[number]["id"][]];
+
+/** Choices from the cake builder; only accepted for products marked customizable. */
+export const cakeCustomizationSchema = z.object({
+  shape: z.enum(ids(CAKE_SHAPES)),
+  frosting: z.enum(ids(CAKE_FROSTINGS)),
+  toppings: z
+    .array(z.enum(ids(CAKE_TOPPINGS)))
+    .max(MAX_TOPPINGS, `Pick up to ${MAX_TOPPINGS} toppings`)
+    .refine((t) => new Set(t).size === t.length, "Each topping can be added once")
+    .default([]),
+});
+
 export const cartItemInputSchema = z.object({
   productId: objectId,
   variantId: objectId,
@@ -175,7 +190,11 @@ export const cartItemInputSchema = z.object({
   flavour: z.string().trim().max(40).optional(),
   eggless: z.boolean().default(false),
   message: z.string().trim().max(60).optional(),
+  custom: cakeCustomizationSchema.optional(),
 });
+
+/** Replace the whole cart at once (used when a guest's cart is carried into their account). */
+export const cartReplaceSchema = z.object({ items: z.array(z.unknown()).max(30) });
 export const cartItemUpdateSchema = z.object({ quantity: z.number().int().min(1).max(20) });
 
 export const quoteSchema = z.object({ couponCode: z.string().trim().toUpperCase().max(30).optional() });
@@ -277,6 +296,7 @@ export type ProductInput = z.infer<typeof productInputSchema>;
 export type ProductQuery = z.infer<typeof productQuerySchema>;
 export type AddressInput = z.infer<typeof addressInputSchema>;
 export type CartItemInput = z.infer<typeof cartItemInputSchema>;
+export type CakeCustomizationInput = z.infer<typeof cakeCustomizationSchema>;
 export type CheckoutInput = z.infer<typeof checkoutSchema>;
 export type CouponInput = z.infer<typeof couponInputSchema>;
 export type ClassInput = z.infer<typeof classInputSchema>;

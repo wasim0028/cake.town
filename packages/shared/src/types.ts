@@ -2,6 +2,7 @@
  * Shapes returned by the caketown API (JSON). Ids are strings, dates are ISO strings,
  * money is integer paise.
  */
+import type { CakeCustomization } from "./builder";
 import type {
   BookingPaymentMethod,
   BookingStatus,
@@ -88,21 +89,27 @@ export interface Product {
   tags: string[];
   isBestseller: boolean;
   isFeatured: boolean;
+  isCustomizable: boolean;
   priceFrom: number;
   rating: { average: number; count: number };
 }
 
 export interface CartLine {
   id: string;
-  product: Pick<Product, "id" | "name" | "slug" | "images">;
+  product: Pick<Product, "id" | "name" | "slug" | "images"> & { category: string };
   variant: { id: string; label: string };
   quantity: number;
   flavour?: string;
   eggless: boolean;
   message?: string;
+  custom?: CakeCustomization;
   unitPrice: number;
   lineTotal: number;
+  /** Hours the bakery needs before this item can be delivered. */
+  preparationHours: number;
   available: boolean;
+  /** Why the line can't be ordered right now, when `available` is false. */
+  issue?: string;
 }
 
 export interface Cart {
@@ -146,6 +153,8 @@ export interface OrderItem {
   flavour?: string;
   eggless: boolean;
   message?: string;
+  custom?: CakeCustomization;
+  customSummary?: string;
   lineTotal: number;
 }
 
@@ -177,6 +186,7 @@ export interface CheckoutResponse {
 
 export interface Review {
   id: string;
+  product?: { name: string; slug: string };
   user: { id: string; name: string; avatar?: string };
   rating: number;
   title?: string;

@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
-import { contactSchema, deviceTokenSchema, newsletterSchema } from "@caketown/shared";
+import { contactSchema, DELIVERY, DELIVERY_SLOTS, deviceTokenSchema, newsletterSchema } from "@caketown/shared";
 import { features } from "../config/env";
 import { ContactMessage, DeviceToken, Subscriber } from "../models";
 import { deleteImages, uploadImage, type ImageFolder } from "../services/cloudinary";
@@ -57,6 +57,17 @@ export async function deleteImage(req: Request, res: Response) {
   const { publicId } = parse(z.object({ publicId: z.string().min(3).max(200) }), req.body);
   await deleteImages([publicId]);
   res.status(204).end();
+}
+
+/* ---------- public config for the apps ---------- */
+
+export function publicConfig(_req: Request, res: Response) {
+  res.json({
+    payments: { razorpay: features.razorpay, cod: true },
+    delivery: DELIVERY,
+    slots: DELIVERY_SLOTS,
+    sms: features.sms,
+  });
 }
 
 /* ---------- health ---------- */

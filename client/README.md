@@ -39,6 +39,27 @@ Text colours meet WCAG AA: caramel is only used for fills and large display text
 Everything respects **prefers-reduced-motion**: animations are switched off, smooth scroll and the
 custom cursor don't start, and content is never hidden waiting for an animation.
 
+## Pages
+
+| Route | What |
+|---|---|
+| `/` | Hero, bestsellers, categories, reviews, classes, newsletter |
+| `/shop`, `/shop/[category]` | Search (debounced, in the URL), category, eggless/vegan/gluten-free, price, sort, infinite scroll |
+| `/product/[slug]` | Size, flavour, eggless, message, quantity, reviews, related; Product structured data for Google |
+| `/cake-builder` | Six steps with a live drawing of the cake and an animated price |
+| `/checkout` | Signs in first; copies the browser cart to the account; address, day and slot, payment, coupon |
+| `/account/*` | Profile and password, orders and live tracking, favourites, addresses, class bookings |
+| `/classes`, `/classes/[slug]` | Dates with seats left, booking (pay at the studio or online) |
+| `/login`, `/signup`, `/forgot-password`, `/reset-password` | Accounts |
+| `/about`, `/contact`, `/help`, `/blog`, `/privacy`, `/terms` | Content. Replace the wording in `about`, `privacy` and `terms` with your own before launch. |
+
+**Cart:** guests keep their cart in the browser. At checkout it is copied into their account with one
+`PUT /cart` call; the server re-prices everything and drops anything no longer available (and says why).
+
+**Payments:** the Razorpay window loads only when someone pays online. After payment the API checks
+with Razorpay before confirming; if the window is closed, the order is held for 30 minutes and the
+"Try paying again" button reopens it.
+
 ## Structure
 
 ```

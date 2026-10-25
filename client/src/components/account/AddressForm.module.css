@@ -1,0 +1,42 @@
+.form {
+  display: grid;
+  gap: var(--s-4);
+  animation: rise-in var(--t-med) var(--ease-out);
+}
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-3);
+}
+.row3 {
+  display: grid;
+  grid-template-columns: 0.8fr 1fr 1.2fr;
+  gap: var(--s-3);
+}
+.labels {
+  display: flex;
+  gap: var(--s-2);
+}
+.label {
+  min-height: 36px;
+  padding: 0 var(--s-4);
+  border-radius: var(--r-pill);
+  border: 1.5px solid var(--line-strong);
+  font-weight: 550;
+  font-size: 0.9rem;
+}
+.label[aria-checked="true"] {
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--bg);
+}
+.actions {
+  display: flex;
+  gap: var(--s-2);
+}
+@media (max-width: 600px) {
+  .row,
+  .row3 {
+    grid-template-columns: 1fr;
+  }
+}

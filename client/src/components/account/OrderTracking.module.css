@@ -1,0 +1,262 @@
+.wrap {
+  display: grid;
+  gap: var(--s-6);
+}
+
+.celebrate {
+  position: relative;
+  display: flex;
+  gap: var(--s-3);
+  align-items: center;
+  padding: var(--s-4) var(--s-5);
+  border-radius: var(--r-lg);
+  background: var(--tag-fresh-bg);
+  color: var(--tag-fresh-text);
+  overflow: hidden;
+  animation: rise-in 600ms var(--ease-out);
+}
+.celebrate div {
+  display: grid;
+}
+.celebrate span {
+  font-size: 0.93rem;
+}
+/* A short burst of sprinkles when the order goes through. */
+.confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.confetti i {
+  position: absolute;
+  top: -10px;
+  left: calc(var(--i) * 7% + 2%);
+  width: 8px;
+  height: 3px;
+  border-radius: 2px;
+  background: hsl(calc(var(--i) * 47) 60% 60%);
+  animation: drift 1.8s calc(var(--i) * 60ms) ease-out forwards;
+  --drift-r: 260deg;
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: var(--s-5);
+  flex-wrap: wrap;
+}
+.number {
+  font-size: var(--step--1);
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+.title {
+  font-size: var(--step-4);
+  margin: var(--s-1) 0 var(--s-2);
+}
+.headActions {
+  display: flex;
+  gap: var(--s-2);
+}
+
+/* Timeline: a caramel line fills up to the current step. */
+.timeline {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  list-style: none;
+  padding: 0;
+  --node: 44px;
+}
+.timeline::before,
+.timeline::after {
+  content: "";
+  position: absolute;
+  top: calc(var(--node) / 2 - 2px);
+  left: calc(12.5%);
+  right: calc(12.5%);
+  height: 4px;
+  border-radius: 4px;
+  background: var(--line);
+}
+.timeline::after {
+  background: linear-gradient(90deg, var(--caramel), var(--pistachio));
+  transform-origin: left;
+  transform: scaleX(var(--progress));
+  transition: transform 1.2s var(--ease-out);
+  animation: grow 1.2s var(--ease-out);
+}
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+.timeline li {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  gap: var(--s-2);
+}
+.node {
+  display: grid;
+  place-items: center;
+  width: var(--node);
+  height: var(--node);
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--line-strong);
+  color: var(--text-muted);
+  transition: background-color var(--t-slow), border-color var(--t-slow), color var(--t-slow);
+}
+[data-state="done"] .node {
+  background: var(--caramel);
+  border-color: var(--caramel);
+  color: var(--cocoa);
+}
+[data-state="current"] .node {
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--bg);
+  box-shadow: 0 0 0 0 rgb(200 137 59 / 0.5);
+  animation: ring 2s var(--ease-out) infinite;
+}
+@keyframes ring {
+  0% {
+    box-shadow: 0 0 0 0 rgb(200 137 59 / 0.45);
+  }
+  100% {
+    box-shadow: 0 0 0 14px rgb(200 137 59 / 0);
+  }
+}
+.stage {
+  display: grid;
+  line-height: 1.35;
+}
+.stage span {
+  font-size: var(--step--1);
+  color: var(--text-muted);
+  max-width: 18ch;
+}
+[data-state="todo"] .stage strong {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: var(--s-5);
+  align-items: start;
+}
+.card {
+  display: grid;
+  gap: var(--s-3);
+  padding: var(--s-5);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+.cardTitle {
+  font-size: var(--step-1);
+  margin-top: var(--s-2);
+}
+.cardTitle:first-child {
+  margin-top: 0;
+}
+.items {
+  display: grid;
+  gap: var(--s-3);
+}
+.items li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s-4);
+}
+.items li > span:first-child {
+  display: grid;
+}
+.totals {
+  display: grid;
+  gap: var(--s-1);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--line);
+}
+.totals div {
+  display: flex;
+  justify-content: space-between;
+}
+.totals dt {
+  color: var(--text-muted);
+}
+.total {
+  font-weight: 700;
+  font-size: var(--step-1);
+}
+.total dt {
+  color: var(--text);
+}
+.address {
+  font-style: normal;
+  line-height: 1.6;
+}
+.payStatus[data-status="paid"] {
+  color: var(--tag-fresh-text);
+  font-weight: 600;
+}
+.payStatus[data-status="failed"] {
+  color: var(--danger);
+  font-weight: 600;
+}
+.help {
+  margin-top: var(--s-3);
+}
+
+@media (max-width: 760px) {
+  .timeline {
+    grid-template-columns: 1fr;
+    gap: var(--s-4);
+    --node: 40px;
+  }
+  .timeline::before,
+  .timeline::after {
+    top: 20px;
+    bottom: 20px;
+    left: 18px;
+    right: auto;
+    width: 4px;
+    height: auto;
+  }
+  .timeline::after {
+    transform-origin: top;
+    transform: scaleY(var(--progress));
+  }
+  @keyframes grow {
+    from {
+      transform: scaleY(0);
+    }
+  }
+  .timeline li {
+    grid-template-columns: var(--node) 1fr;
+    justify-items: start;
+    text-align: left;
+    align-items: center;
+    gap: var(--s-4);
+  }
+  .stage span {
+    max-width: none;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-state="current"] .node {
+    animation: none;
+  }
+  .confetti {
+    display: none;
+  }
+}

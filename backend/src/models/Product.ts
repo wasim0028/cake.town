@@ -33,6 +33,8 @@ const productSchema = new mongoose.Schema(
     isBestseller: { type: Boolean, default: false },
     isFeatured: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true },
+    /** Shown in the cake builder; accepts shape/frosting/topping choices. */
+    isCustomizable: { type: Boolean, default: false },
     lowStockThreshold: { type: Number, default: 5 },
     /** Lowest variant price, kept in sync for sorting and price filters. */
     priceFrom: { type: Number, default: 0 },

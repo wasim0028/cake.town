@@ -36,7 +36,7 @@ interface OrderLike {
   _id?: unknown;
   orderNumber: string;
   status: string;
-  items: { name: string; variantLabel: string; quantity: number; lineTotal: number; eggless?: boolean | null; message?: string | null }[];
+  items: { name: string; variantLabel: string; quantity: number; lineTotal: number; eggless?: boolean | null; message?: string | null; customSummary?: string | null }[];
   subtotal: number;
   discount?: number | null;
   deliveryFee?: number | null;
@@ -63,8 +63,8 @@ export function orderStatusEmail(order: OrderLike) {
     .map(
       (i) => `<tr>
 <td style="padding:8px 0;border-bottom:1px solid ${C.line}">${esc(i.name)} <span style="color:${C.muted}">· ${esc(i.variantLabel)}${i.eggless ? " · eggless" : ""} × ${i.quantity}</span>${
-        i.message ? `<br><span style="color:${C.muted};font-size:12px">Message: “${esc(i.message)}”</span>` : ""
-      }</td>
+        i.customSummary ? `<br><span style="color:${C.muted};font-size:12px">${esc(i.customSummary)}</span>` : ""
+      }${i.message ? `<br><span style="color:${C.muted};font-size:12px">Message: “${esc(i.message)}”</span>` : ""}</td>
 <td align="right" style="padding:8px 0;border-bottom:1px solid ${C.line}">${formatINR(i.lineTotal)}</td></tr>`,
     )
     .join("");

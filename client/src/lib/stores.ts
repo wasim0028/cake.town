@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import type { User } from "@caketown/shared";
+import type { CakeCustomization, User } from "@caketown/shared";
 
 /* ---------- auth ---------- */
 
@@ -36,6 +36,10 @@ export interface CartItem {
   quantity: number;
   eggless?: boolean;
   message?: string;
+  flavour?: string;
+  custom?: CakeCustomization;
+  /** Human summary of builder choices, for display. */
+  customSummary?: string;
   image?: string;
 }
 
@@ -51,7 +55,8 @@ interface CartState {
   setOpen: (open: boolean) => void;
 }
 
-const lineKey = (i: Pick<CartItem, "variantId" | "eggless" | "message">) => `${i.variantId}|${i.eggless ? 1 : 0}|${i.message ?? ""}`;
+export const cartLineKey = (i: Pick<CartItem, "variantId" | "eggless" | "message" | "flavour" | "custom">) =>
+  [i.variantId, i.eggless ? 1 : 0, i.message ?? "", i.flavour ?? "", i.custom ? JSON.stringify({ ...i.custom, toppings: [...i.custom.toppings].sort() }) : ""].join("|");
 
 export const useCart = create<CartState>()(
   persist(
@@ -61,7 +66,7 @@ export const useCart = create<CartState>()(
       bumpKey: 0,
       add: (item, quantity = 1) =>
         set((s) => {
-          const key = lineKey(item);
+          const key = cartLineKey(item);
           const existing = s.items.find((i) => i.key === key);
           const items = existing
             ? s.items.map((i) => (i.key === key ? { ...i, quantity: Math.min(20, i.quantity + quantity) } : i))

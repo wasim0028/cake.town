@@ -41,6 +41,7 @@ export interface SeedProduct {
   tags?: string[];
   isBestseller?: boolean;
   isFeatured?: boolean;
+  isCustomizable?: boolean;
 }
 
 export const products: SeedProduct[] = [
@@ -150,6 +151,21 @@ export const products: SeedProduct[] = [
     ...cakeDefaults,
     preparationHours: 24,
     tags: ["custom", "photo", "birthday"],
+  },
+
+  {
+    name: "Design Your Own Cake",
+    category: "cakes",
+    shortDescription: "Pick the shape, sponge, frosting and toppings. We bake it for you.",
+    description:
+      "Built in our cake designer: choose a round, square or heart cake, your sponge flavour, a frosting and up to four toppings, then add a message. Needs a day to make.",
+    variants: cakeSizes(649, 1199, 2249),
+    flavours: ["Vanilla", "Chocolate", "Red velvet", "Butterscotch", "Pineapple", "Mango"],
+    ...cakeDefaults,
+    preparationHours: 24,
+    tags: ["custom", "birthday", "anniversary", "builder"],
+    isCustomizable: true,
+    isFeatured: true,
   },
 
   // ---------- Breads ----------

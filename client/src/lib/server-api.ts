@@ -1,5 +1,5 @@
 import "server-only";
-import type { BakingClass, Category, Paginated, Product } from "@caketown/shared";
+import type { BakingClass, Category, Paginated, Product, Review } from "@caketown/shared";
 
 /**
  * Server-side reads for public pages (rendered on the server for SEO and speed).
@@ -35,4 +35,28 @@ export async function getCategories(): Promise<Category[]> {
 export async function getClasses(): Promise<BakingClass[]> {
   const data = await get<{ items: BakingClass[] }>("/classes", 300);
   return data?.items ?? [];
+}
+
+export async function getProduct(slug: string): Promise<Product | null> {
+  const data = await get<{ product: Product }>(`/products/${encodeURIComponent(slug)}`, 60);
+  return data?.product ?? null;
+}
+
+export async function getRelated(slug: string): Promise<Product[]> {
+  const data = await get<{ items: Product[] }>(`/products/${encodeURIComponent(slug)}/related`, 300);
+  return data?.items ?? [];
+}
+
+export async function getReviews(slug: string): Promise<Paginated<Review> | null> {
+  return get<Paginated<Review>>(`/products/${encodeURIComponent(slug)}/reviews?limit=6`, 60);
+}
+
+export async function getLatestReviews(): Promise<Review[]> {
+  const data = await get<{ items: Review[] }>("/reviews/latest?limit=6", 300);
+  return data?.items ?? [];
+}
+
+export async function getClass(slug: string): Promise<BakingClass | null> {
+  const data = await get<{ class: BakingClass }>(`/classes/${encodeURIComponent(slug)}`, 60);
+  return data?.class ?? null;
 }

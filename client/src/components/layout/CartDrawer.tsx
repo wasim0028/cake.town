@@ -62,10 +62,8 @@ export function CartDrawer() {
                 <Link href={`/product/${item.slug}`} className={styles.name} onClick={close}>
                   {item.name}
                 </Link>
-                <p className={styles.meta}>
-                  {item.variantLabel}
-                  {item.eggless && " · eggless"}
-                </p>
+                <p className={styles.meta}>{[item.variantLabel, item.flavour, item.eggless && "eggless"].filter(Boolean).join(" · ")}</p>
+                {item.customSummary && <p className={styles.meta}>{item.customSummary}</p>}
                 {item.message && <p className={styles.meta}>“{item.message}”</p>}
                 <div className={styles.controls}>
                   <div className={styles.stepper}>

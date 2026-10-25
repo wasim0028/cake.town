@@ -250,3 +250,40 @@ html:not(.js) [data-reveal] {
     transform: none;
   }
 }
+
+/* ---------- long-form text (about, help, recipes, policies) ---------- */
+
+.prose {
+  max-width: var(--measure);
+  font-size: 1.06rem;
+  line-height: 1.75;
+}
+.prose > * + * {
+  margin-top: var(--s-4);
+}
+.prose h2 {
+  font-size: var(--step-3);
+  margin-top: var(--s-7);
+}
+.prose h3 {
+  font-size: var(--step-1);
+  margin-top: var(--s-5);
+}
+.prose ul,
+.prose ol {
+  padding-left: 1.3em;
+}
+.prose li + li {
+  margin-top: var(--s-2);
+}
+.prose li::marker {
+  color: var(--accent);
+}
+.prose a {
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.prose strong {
+  font-weight: 650;
+}

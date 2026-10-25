@@ -4,6 +4,7 @@ import {
   addressUpdateSchema,
   cartItemInputSchema,
   cartItemUpdateSchema,
+  cartReplaceSchema,
   checkoutSchema,
   CUSTOMER_CANCELLABLE,
   paginationSchema,
@@ -13,7 +14,7 @@ import {
 import { logger } from "../config/logger";
 import { Address, Order, Product, User } from "../models";
 import { presentProduct } from "../services/catalog";
-import { getCartDoc, loadCart, publicCart } from "../services/cart";
+import { assertStock, getCartDoc, loadCart, publicCart, sameLine, validateCartItem } from "../services/cart";
 import { cancelOrder, placeOrder } from "../services/orders";
 import { handleRazorpayWebhook, verifyClientPayment } from "../services/payments";
 import { deliveryFeeFor, evaluateCoupon } from "../services/pricing";
@@ -29,29 +30,12 @@ export async function getCart(req: Request, res: Response) {
 
 export async function addCartItem(req: Request, res: Response) {
   const input = parse(cartItemInputSchema, req.body);
-  const product = await Product.findOne({ _id: input.productId, isActive: true }).lean();
-  if (!product) throw notFound("Product");
-  const variant = product.variants.find((v) => String(v._id) === input.variantId);
-  if (!variant) throw notFound("Size option");
-  if (input.flavour && !product.flavours.includes(input.flavour)) throw badRequest("That flavour isn't available", "INVALID_FLAVOUR");
-  if (input.eggless && !product.egglessOption?.available) throw badRequest("This item isn't available eggless", "EGGLESS_UNAVAILABLE");
-  if (input.message && (!product.allowsMessage || input.message.length > product.maxMessageLength)) {
-    throw badRequest(product.allowsMessage ? `Messages can be up to ${product.maxMessageLength} characters` : "This item doesn't take a message", "INVALID_MESSAGE");
-  }
-
+  const { product, variant } = await validateCartItem(input);
   const cart = await getCartDoc(userId(req));
-  // Same product + options → increase quantity instead of adding a second line.
-  const same = cart.items.find(
-    (i) =>
-      String(i.product) === input.productId &&
-      String(i.variantId) === input.variantId &&
-      (i.flavour ?? "") === (input.flavour ?? "") &&
-      i.eggless === input.eggless &&
-      (i.message ?? "") === (input.message ?? ""),
-  );
+  // Same product + same options → increase quantity instead of adding a second line.
+  const same = cart.items.find((i) => sameLine(i, input));
   const newQty = (same?.quantity ?? 0) + input.quantity;
-  if (newQty > 20) throw badRequest("You can add up to 20 of one item", "MAX_QUANTITY");
-  if (variant.stock < newQty) throw new AppError(409, "OUT_OF_STOCK", variant.stock ? `Only ${variant.stock} left` : "This is sold out");
+  assertStock(variant, newQty);
 
   if (same) same.quantity = newQty;
   else {
@@ -62,10 +46,46 @@ export async function addCartItem(req: Request, res: Response) {
       flavour: input.flavour,
       eggless: input.eggless,
       message: input.message,
+      custom: input.custom,
     });
   }
   await cart.save();
   res.status(201).json({ cart: publicCart(await loadCart(userId(req))) });
+}
+
+/**
+ * Replaces the whole cart, e.g. when a guest signs in and their browser cart becomes their
+ * account cart. Valid lines are kept; each rejected line comes back with the reason.
+ */
+export async function replaceCart(req: Request, res: Response) {
+  const { items } = parse(cartReplaceSchema, req.body);
+  const accepted: { product: unknown; variantId: unknown; quantity: number; flavour?: string; eggless: boolean; message?: string; custom?: unknown }[] = [];
+  const rejected: { index: number; code: string; message: string }[] = [];
+
+  for (const [index, raw] of items.entries()) {
+    const parsed = cartItemInputSchema.safeParse(raw);
+    if (!parsed.success) {
+      rejected.push({ index, code: "VALIDATION_ERROR", message: parsed.error.issues[0]?.message ?? "Invalid item" });
+      continue;
+    }
+    const input = parsed.data;
+    try {
+      const { product, variant } = await validateCartItem(input);
+      const existing = accepted.find((a) => sameLine(a, input));
+      const qty = (existing?.quantity ?? 0) + input.quantity;
+      assertStock(variant, qty);
+      if (existing) existing.quantity = qty;
+      else accepted.push({ product: product._id, variantId: variant._id, quantity: input.quantity, flavour: input.flavour, eggless: input.eggless, message: input.message, custom: input.custom });
+    } catch (err) {
+      if (!(err instanceof AppError)) throw err;
+      rejected.push({ index, code: err.code, message: err.message });
+    }
+  }
+
+  const cart = await getCartDoc(userId(req));
+  cart.set("items", accepted);
+  await cart.save();
+  res.json({ cart: publicCart(await loadCart(userId(req))), rejected });
 }
 
 export async function updateCartItem(req: Request, res: Response) {
@@ -75,7 +95,7 @@ export async function updateCartItem(req: Request, res: Response) {
   if (!item) throw notFound("Cart item");
   const product = await Product.findById(item.product).select("variants").lean();
   const variant = product?.variants.find((v) => String(v._id) === String(item.variantId));
-  if (variant && variant.stock < quantity) throw new AppError(409, "OUT_OF_STOCK", `Only ${variant.stock} left`);
+  if (variant) assertStock(variant, quantity);
   item.quantity = quantity;
   await cart.save();
   res.json({ cart: publicCart(await loadCart(userId(req))) });
@@ -230,6 +250,7 @@ export async function reorder(req: Request, res: Response) {
       flavour: item.flavour,
       eggless: item.eggless,
       message: item.message,
+      custom: item.custom ?? undefined,
     });
   }
   await cart.save();

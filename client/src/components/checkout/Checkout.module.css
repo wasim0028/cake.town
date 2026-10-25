@@ -1,0 +1,250 @@
+.checkout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: clamp(var(--s-6), 4vw, var(--s-8));
+  align-items: start;
+  padding-block: var(--s-6) var(--s-9);
+}
+.title {
+  font-size: var(--step-4);
+  margin-bottom: var(--s-5);
+}
+.steps {
+  display: grid;
+  gap: var(--s-5);
+}
+.step {
+  display: grid;
+  gap: var(--s-4);
+  padding: var(--s-5);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+.stepTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  font-size: var(--step-2);
+}
+.num {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--text);
+  color: var(--bg);
+  font-family: var(--font-body-stack);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+.addressForm {
+  padding-top: var(--s-2);
+}
+
+.days {
+  display: flex;
+  gap: var(--s-2);
+  overflow-x: auto;
+  padding-bottom: var(--s-1);
+  scrollbar-width: thin;
+}
+.day {
+  flex: 0 0 auto;
+  display: grid;
+  justify-items: center;
+  gap: 1px;
+  min-width: 92px;
+  padding: var(--s-2) var(--s-3);
+  border-radius: var(--r-md);
+  border: 1.5px solid var(--line-strong);
+  line-height: 1.3;
+  transition: border-color var(--t-fast), background-color var(--t-fast);
+}
+.day span {
+  font-size: var(--step--1);
+  color: var(--text-muted);
+}
+.day[aria-checked="true"] {
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--bg);
+}
+.day[aria-checked="true"] span {
+  color: inherit;
+  opacity: 0.8;
+}
+.day:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.summary {
+  position: sticky;
+  top: calc(var(--nav-h) + var(--s-4));
+  display: grid;
+  gap: var(--s-4);
+  padding: var(--s-5);
+  border-radius: var(--r-lg);
+  background: var(--plate);
+}
+.summaryTitle {
+  font-size: var(--step-2);
+}
+.lines {
+  display: grid;
+  gap: var(--s-3);
+  max-height: 340px;
+  overflow-y: auto;
+}
+.line {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  gap: var(--s-3);
+  align-items: center;
+  font-size: 0.93rem;
+}
+.line[data-unavailable] {
+  opacity: 0.6;
+}
+.lineArt {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--surface);
+  display: grid;
+  place-items: center;
+}
+.lineArt svg,
+.lineArt img {
+  width: 90%;
+  height: 90%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.qty {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-pill);
+  background: var(--text);
+  color: var(--bg);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.lineInfo {
+  display: grid;
+  line-height: 1.35;
+  min-width: 0;
+}
+.lineInfo span {
+  font-size: var(--step--1);
+  color: var(--text-muted);
+}
+.lineInfo .issue {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.coupon {
+  position: relative;
+  display: flex;
+  gap: var(--s-2);
+  align-items: center;
+}
+.coupon input {
+  padding-left: 40px;
+  min-height: 44px;
+  text-transform: uppercase;
+}
+.couponIcon {
+  position: absolute;
+  left: 14px;
+  color: var(--text-muted);
+}
+.couponError {
+  font-size: var(--step--1);
+  color: var(--danger);
+}
+.couponOk {
+  font-size: var(--step--1);
+  color: var(--tag-fresh-text);
+  font-weight: 600;
+}
+
+.totals {
+  display: grid;
+  gap: var(--s-2);
+  padding-top: var(--s-4);
+  border-top: 1px solid var(--line-strong);
+}
+.totals div {
+  display: flex;
+  justify-content: space-between;
+}
+.totals dt {
+  color: var(--text-muted);
+}
+.discount dd {
+  color: var(--tag-fresh-text);
+  font-weight: 600;
+}
+.total {
+  padding-top: var(--s-2);
+  font-size: var(--step-1);
+  font-weight: 700;
+}
+.total dt {
+  color: var(--text);
+}
+.held {
+  padding: var(--s-3) var(--s-4);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  font-size: 0.93rem;
+}
+.notice {
+  display: flex;
+  gap: var(--s-3);
+  padding: var(--s-4);
+  border-radius: var(--r-md);
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+.notice ul {
+  margin-top: var(--s-1);
+  padding-left: 1.1em;
+  font-size: 0.93rem;
+}
+.loading {
+  display: grid;
+  gap: var(--s-4);
+  padding-block: var(--s-8);
+}
+.empty {
+  display: grid;
+  justify-items: start;
+  gap: var(--s-4);
+  padding-block: var(--s-9);
+}
+.emptyArt {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: var(--plate);
+}
+
+@media (max-width: 960px) {
+  .checkout {
+    grid-template-columns: 1fr;
+  }
+  .summary {
+    position: static;
+  }
+}

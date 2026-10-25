@@ -25,7 +25,7 @@ const COLUMNS = [
   {
     title: "Help",
     links: [
-      { href: "/help/delivery", label: "Delivery slots & areas" },
+      { href: "/help#delivery", label: "Delivery slots & areas" },
       { href: "/account/orders", label: "Track an order" },
       { href: "/help#faq", label: "Questions" },
       { href: "/account", label: "Your account" },
