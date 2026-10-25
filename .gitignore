@@ -1,2 +1,15 @@
 node_modules
+dist
+build
+.next
+.expo
+coverage
+
+# env files (keep the .example ones)
+.env
+.env.*
+!.env.example
 config.env
+
+.DS_Store
+*.log
