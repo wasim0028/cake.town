@@ -15,7 +15,7 @@ import type { OrderFields } from "../models/Order";
 import { refundPayment } from "../services/razorpay";
 import { transitionOrder } from "../services/orders";
 import { AppError, badRequest, notFound } from "../utils/errors";
-import { escapeRegex, paginate, parse, userId } from "../utils/http";
+import { escapeRegex, paginate, parse, parsePatch, userId } from "../utils/http";
 import { presentUser } from "./auth.controller";
 
 /* ---------- dashboard ---------- */
@@ -191,7 +191,7 @@ export async function createCoupon(req: Request, res: Response) {
 }
 
 export async function updateCoupon(req: Request, res: Response) {
-  const input = parse(couponUpdateSchema, req.body);
+  const input = parsePatch(couponUpdateSchema, req.body);
   const coupon = await Coupon.findById(req.params.id);
   if (!coupon) throw notFound("Coupon");
   checkCouponValue(input.type ?? coupon.type, input.value ?? coupon.value);

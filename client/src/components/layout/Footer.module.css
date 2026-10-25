@@ -1,0 +1,85 @@
+.footer {
+  background: var(--inverse-bg);
+  color: var(--inverse-text);
+  padding-top: clamp(var(--s-8), 7vw, var(--s-9));
+  /* A scalloped edge, like the rim of a tart tin. */
+  -webkit-mask: radial-gradient(14px at 50% 0, #0000 98%, #000) 50% / 36px 100% repeat-x;
+  mask: radial-gradient(14px at 50% 0, #0000 98%, #000) 50% / 36px 100% repeat-x;
+  margin-top: var(--s-8);
+}
+
+.top {
+  display: grid;
+  grid-template-columns: 1.6fr repeat(3, 1fr);
+  gap: var(--s-7) var(--s-6);
+  padding-bottom: var(--s-8);
+}
+
+.brand p {
+  margin-top: var(--s-4);
+  max-width: 36ch;
+  color: var(--inverse-muted);
+}
+.brand .hours {
+  font-size: var(--step--1);
+  line-height: 1.7;
+}
+.brand a:not(:first-child),
+.hours a {
+  color: var(--inverse-text);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.colTitle {
+  font-family: var(--font-body-stack);
+  font-size: 0.95rem;
+  font-weight: 650;
+  letter-spacing: 0;
+  color: var(--caramel);
+  margin-bottom: var(--s-4);
+}
+.col ul {
+  display: grid;
+  gap: var(--s-3);
+}
+.col a {
+  color: var(--inverse-muted);
+  transition: color var(--t-fast);
+}
+.col a:hover {
+  color: var(--inverse-text);
+}
+
+.bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3) var(--s-6);
+  padding-block: var(--s-5);
+  border-top: 1px solid rgb(255 255 255 / 0.1);
+  font-size: var(--step--1);
+  color: var(--inverse-muted);
+}
+.legal {
+  display: flex;
+  gap: var(--s-5);
+}
+.legal a:hover {
+  color: var(--inverse-text);
+}
+
+@media (max-width: 860px) {
+  .top {
+    grid-template-columns: 1fr 1fr;
+  }
+  .brand {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 480px) {
+  .top {
+    grid-template-columns: 1fr;
+  }
+}

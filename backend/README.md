@@ -152,5 +152,5 @@ src/
   routes/v1/    route table
 seed/           starter catalogue
 scripts/        migrate-users.ts
-tests/          vitest + supertest (46 tests)
+tests/          vitest + supertest (47 tests)
 ```

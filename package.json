@@ -5,6 +5,7 @@
   "description": "caketown – bakery web and mobile apps with a shared Express + MongoDB API",
   "workspaces": [
     "backend",
+    "client",
     "packages/*"
   ],
   "engines": {
@@ -17,6 +18,9 @@
     "seed": "npm run seed -w @caketown/backend",
     "migrate:users": "npm run migrate:users -w @caketown/backend",
     "test": "npm run test -w @caketown/backend",
-    "typecheck": "npm run typecheck --workspaces --if-present"
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "dev:web": "npm run dev -w @caketown/web",
+    "build:web": "npm run build -w @caketown/web",
+    "start:web": "npm run start -w @caketown/web"
   }
 }

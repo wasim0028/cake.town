@@ -1,0 +1,129 @@
+.btn {
+  --btn-bg: var(--text);
+  --btn-fg: var(--bg);
+  --btn-border: transparent;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  min-height: 48px;
+  padding: 0 var(--s-5);
+  border-radius: var(--r-pill);
+  border: 1.5px solid var(--btn-border);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-weight: 600;
+  font-size: 0.97rem;
+  letter-spacing: 0.005em;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform var(--t-fast) var(--ease-out),
+    box-shadow var(--t-med) var(--ease-out),
+    background-color var(--t-med) var(--ease-out),
+    color var(--t-med) var(--ease-out),
+    border-color var(--t-med) var(--ease-out);
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.sm { min-height: 38px; padding: 0 var(--s-4); font-size: 0.9rem; }
+.lg { min-height: 56px; padding: 0 var(--s-6); font-size: 1.02rem; }
+.block { width: 100%; }
+
+/* Primary: cocoa pill with a caramel sheen that sweeps across on hover. */
+.primary {
+  box-shadow: var(--shadow-1);
+}
+.primary::after {
+  content: "";
+  position: absolute;
+  inset: -2px auto -2px 0;
+  width: 45%;
+  z-index: -1;
+  background: linear-gradient(90deg, transparent, rgb(233 196 138 / 0.38), transparent);
+  transform: translateX(-120%) skewX(-18deg);
+  pointer-events: none;
+}
+@media (hover: hover) {
+  .primary:hover:not(:disabled) {
+    box-shadow: var(--shadow-2);
+    transform: translateY(-1px);
+  }
+  .primary:hover:not(:disabled)::after {
+    animation: sweep 900ms var(--ease-out);
+  }
+}
+
+.secondary {
+  --btn-bg: transparent;
+  --btn-fg: var(--text);
+  --btn-border: var(--line-strong);
+}
+@media (hover: hover) {
+  .secondary:hover:not(:disabled) {
+    --btn-border: var(--text);
+    --btn-bg: var(--surface);
+  }
+}
+
+.ghost {
+  --btn-bg: transparent;
+  --btn-fg: var(--text);
+  padding-inline: var(--s-3);
+}
+@media (hover: hover) {
+  .ghost:hover:not(:disabled) { --btn-bg: var(--plate); }
+}
+
+/* For dark "oven" sections. */
+.caramel {
+  --btn-bg: var(--caramel);
+  --btn-fg: var(--cocoa);
+}
+@media (hover: hover) {
+  .caramel:hover:not(:disabled) { --btn-bg: var(--honey); }
+}
+
+.icon {
+  display: inline-flex;
+  width: 1.15em;
+  height: 1.15em;
+}
+.icon :global(svg) {
+  width: 100%;
+  height: 100%;
+}
+
+.ripple {
+  position: absolute;
+  z-index: -1;
+  border-radius: 50%;
+  background: currentColor;
+  pointer-events: none;
+  animation: ripple 620ms var(--ease-out) forwards;
+}
+
+.loading .label,
+.loading .icon {
+  opacity: 0;
+}
+.spinner {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  animation: spin 700ms linear infinite;
+}

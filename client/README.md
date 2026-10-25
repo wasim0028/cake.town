@@ -1,70 +1,62 @@
-# Getting Started with Create React App
+# caketown web
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Next.js 16 (App Router) + React 19 + TypeScript. Talks to the caketown API through a same-origin
+proxy (`/api/v1/*` → `API_URL`), so the API's httpOnly login cookies just work.
 
-## Available Scripts
+```bash
+# from the repo root, with the API running (npm run dev:api)
+cp client/.env.example client/.env.local
+npm run dev:web          # http://localhost:3000
+npm run build:web && npm run start:web
+```
 
-In the project directory, you can run:
+## Design system
 
-### `npm start`
+| | |
+|---|---|
+| **Palette** | flour `#F7F1E7` (page), crumb `#EFE5D3` (plates), cocoa `#1F1611` (text, dark sections), caramel `#C8893B` (accent fills), crust `#8A4B1F` (links), pistachio `#8FA87C` (eggless / fresh). Dark mode remaps the semantic tokens in `src/styles/tokens.css`. |
+| **Type** | Fraunces (variable: weight, optical size, SOFT, WONK) for headings, DM Sans for everything else. Major-third scale on a 17px base. Both self-hosted from npm, so builds never call Google Fonts. |
+| **Shape** | Products sit on round plates rather than cards. Radii 8 / 14 / 24px and pills; warm cocoa-tinted shadows. |
+| **Art** | `src/components/art/BakeArt.tsx` draws every product (red velvet is red, the cheesecake has blueberry compote, the sourdough has its ear). Uploaded photos replace the drawings automatically. |
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Text colours meet WCAG AA: caramel is only used for fills and large display text; links use crust.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Motion
 
-### `npm test`
+| Where | What | How |
+|---|---|---|
+| Hero | Headline lines rise while the Fraunces SOFT and weight axes swell ("dough rising"); cake floats on its stand; sprinkles drift; cake parallaxes on scroll | CSS keyframes, GSAP ScrollTrigger |
+| Pages | Fade + 12px lift on every navigation | CSS in `app/template.tsx` |
+| Scroll | Sections and product plates fade up once, staggered | `<Reveal>` + IntersectionObserver |
+| Smooth scroll | Lenis on mouse/trackpad (native on touch) | `SmoothScroll.tsx` |
+| Products | Bake lifts off the plate on hover, breads steam, "Add" rises into view, item flies into the cart, badge bumps, heart bursts | CSS + Web Animations API |
+| Buttons | Ripple from the press point, caramel sheen sweep on primary | `Button.tsx` |
+| Navbar | Transparent → frosted glass on scroll, underline grows on links, hamburger folds into an X | CSS |
+| Cart & menu | Spring slide-in drawers with focus trap and Esc to close | Motion (`motion/react`) |
+| Cursor | Caramel dot that swells over clickable things (desktop mouse only) | `Cursor.tsx` |
+| Everywhere | Skeleton shimmer, toasts | CSS |
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Everything respects **prefers-reduced-motion**: animations are switched off, smooth scroll and the
+custom cursor don't start, and content is never hidden waiting for an animation.
 
-### `npm run build`
+## Structure
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+src/
+  app/            layout, page (home), template (page transition), not-found, fonts, icon
+  components/
+    art/          BakeArt (product drawings), HeroCake
+    home/         Hero, NextSlot, HeroParallax, Sections (trust strip, bestsellers, categories, kitchen), Newsletter
+    layout/       Navbar, Footer, CartDrawer, Wordmark, Theme toggle, SmoothScroll, Cursor, Reveal
+    product/      ProductPlate
+    ui/           Button, Drawer, Toaster, primitives (Price, Tag, Skeleton, SectionHeading)
+  lib/            api (browser client with silent token refresh), server-api, stores (auth, cart, toasts), delivery, flyToCart
+  styles/         tokens.css, animations.css, globals.css
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Deploying behind proxies
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Rate limits in the API are per client IP. If the site runs on Vercel and the API on Render, each
+request passes through two proxies, so set `TRUST_PROXY=2` in the API's environment. Don't expose
+the Next.js server directly to the internet without a proxy in front of it, or clients could set
+their own `X-Forwarded-For`.

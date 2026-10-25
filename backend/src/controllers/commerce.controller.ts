@@ -19,7 +19,7 @@ import { handleRazorpayWebhook, verifyClientPayment } from "../services/payments
 import { deliveryFeeFor, evaluateCoupon } from "../services/pricing";
 import { verifyWebhookSignature } from "../services/razorpay";
 import { AppError, badRequest, notFound } from "../utils/errors";
-import { paginate, parse, userId } from "../utils/http";
+import { paginate, parse, parsePatch, userId } from "../utils/http";
 
 /* ---------- cart ---------- */
 
@@ -136,7 +136,7 @@ export async function createAddress(req: Request, res: Response) {
 }
 
 export async function updateAddress(req: Request, res: Response) {
-  const input = parse(addressUpdateSchema, req.body);
+  const input = parsePatch(addressUpdateSchema, req.body);
   const uid = userId(req);
   const address = await Address.findOneAndUpdate({ _id: req.params.id, user: uid }, { $set: input }, { new: true });
   if (!address) throw notFound("Address");

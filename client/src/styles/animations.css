@@ -1,0 +1,88 @@
+/*
+ * Shared keyframes. Rule of thumb: only transform and opacity are animated (60fps, no layout),
+ * and everything here is switched off for people who ask for reduced motion (see globals.css).
+ */
+
+/* The hero cake: a slow bob, like it's sitting on a just-opened oven's warm air. */
+@keyframes float {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(-0.6deg); }
+  50% { transform: translate3d(0, -14px, 0) rotate(0.6deg); }
+}
+
+/* Its shadow on the table breathes with it. */
+@keyframes float-shadow {
+  0%, 100% { transform: scaleX(1); opacity: 0.55; }
+  50% { transform: scaleX(0.86); opacity: 0.35; }
+}
+
+/* Sprinkles and crumbs drifting down, then fading. */
+@keyframes drift {
+  0% { transform: translate3d(0, -12px, 0) rotate(0deg); opacity: 0; }
+  12% { opacity: 1; }
+  100% { transform: translate3d(var(--drift-x, 12px), 120px, 0) rotate(var(--drift-r, 180deg)); opacity: 0; }
+}
+
+/* Steam over a fresh loaf. */
+@keyframes steam {
+  0% { transform: translateY(6px) scaleY(0.8); opacity: 0; }
+  30% { opacity: 0.7; }
+  100% { transform: translateY(-22px) scaleY(1.15); opacity: 0; }
+}
+
+/* Skeleton loaders: a warm sheen sweeping across. */
+@keyframes shimmer {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+/* Caramel light sweeping across the primary button on hover. */
+@keyframes sweep {
+  from { transform: translateX(-120%) skewX(-18deg); }
+  to { transform: translateX(220%) skewX(-18deg); }
+}
+
+/* Click ripple. */
+@keyframes ripple {
+  from { transform: translate(-50%, -50%) scale(0); opacity: 0.45; }
+  to { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+}
+
+/* Cart badge bump when something lands in the cart. */
+@keyframes bump {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.45); }
+  55% { transform: scale(0.88); }
+  80% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+/* Heart burst for the wishlist. */
+@keyframes heart-pop {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.35); }
+  70% { transform: scale(0.92); }
+  100% { transform: scale(1); }
+}
+@keyframes burst {
+  from { transform: rotate(var(--a)) translateY(0) scale(1); opacity: 1; }
+  to { transform: rotate(var(--a)) translateY(-18px) scale(0.2); opacity: 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translate3d(0, 14px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translate3d(0, 16px, 0) scale(0.97); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

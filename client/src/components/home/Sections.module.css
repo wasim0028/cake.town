@@ -1,0 +1,282 @@
+/* ---------- trust strip ---------- */
+
+.trust {
+  border-block: 1px solid var(--line);
+  background: var(--surface);
+}
+.trustList {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.fact {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  padding: var(--s-5) var(--s-5);
+  line-height: 1.35;
+}
+.fact + .fact {
+  border-left: 1px solid var(--line);
+}
+.fact strong {
+  display: block;
+  font-weight: 650;
+}
+.factBody {
+  display: block;
+  font-size: var(--step--1);
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.factIcon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--plate);
+  color: var(--accent-display);
+}
+@media (max-width: 860px) {
+  .trustList {
+    grid-template-columns: 1fr;
+    padding-inline: 0;
+  }
+  .fact {
+    padding: var(--s-4) var(--gutter);
+  }
+  .fact + .fact {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+}
+
+/* ---------- bestsellers: plates on a shelf ---------- */
+
+.shelf {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--s-8) var(--s-6);
+  list-style: none;
+  padding: 0;
+}
+@media (max-width: 1080px) {
+  .shelf {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+/* Phones: a sideways-scrolling counter you swipe through. */
+@media (max-width: 720px) {
+  .shelf {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 64%;
+    gap: var(--s-5);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    margin-inline: calc(var(--gutter) * -1);
+    padding: var(--s-2) var(--gutter) var(--s-4);
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+  }
+  .shelf::-webkit-scrollbar {
+    display: none;
+  }
+  .shelf > li {
+    scroll-snap-align: start;
+  }
+}
+
+.unavailable {
+  padding: var(--s-6);
+  border: 1.5px dashed var(--line-strong);
+  border-radius: var(--r-lg);
+  color: var(--text-muted);
+}
+
+/* ---------- categories ---------- */
+
+.categoriesSection {
+  padding-top: 0;
+}
+.categories {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--s-5);
+  list-style: none;
+  padding: 0;
+}
+.category {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  gap: 2px;
+  padding: var(--s-2);
+  border-radius: var(--r-lg);
+}
+.categoryPlate {
+  width: min(170px, 100%);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--plate);
+  box-shadow: inset 0 0 0 6px var(--plate-rim);
+  display: grid;
+  place-items: center;
+  margin-bottom: var(--s-3);
+  transition: transform var(--t-slow) var(--ease-spring), box-shadow var(--t-slow) var(--ease-out);
+}
+.categoryPlate svg {
+  width: 84%;
+  height: 84%;
+  transition: transform var(--t-slow) var(--ease-spring);
+}
+@media (hover: hover) {
+  .category:hover .categoryPlate {
+    box-shadow: inset 0 0 0 6px var(--plate-rim), var(--shadow-2);
+  }
+  .category:hover .categoryPlate svg {
+    transform: rotate(-6deg) scale(1.06);
+  }
+}
+.categoryName {
+  font-family: var(--font-display-stack);
+  font-variation-settings: "SOFT" 100;
+  font-size: var(--step-1);
+  font-weight: 560;
+}
+.categoryCount {
+  font-size: var(--step--1);
+  color: var(--text-muted);
+}
+@media (max-width: 860px) {
+  .categories {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 36%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    scrollbar-width: none;
+  }
+  .categories > li {
+    scroll-snap-align: start;
+  }
+}
+
+/* ---------- kitchen (the dark "oven" section) ---------- */
+
+.kitchen {
+  background: var(--inverse-bg);
+  color: var(--inverse-text);
+  padding-block: clamp(var(--s-8), 8vw, var(--s-10));
+}
+.kitchenGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(var(--s-6), 5vw, var(--s-9));
+  align-items: center;
+}
+.kitchenPhoto img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--r-lg) var(--r-lg) var(--r-lg) 120px;
+}
+.kitchenCopy h2 {
+  color: var(--inverse-text);
+}
+.kitchenLede {
+  margin-top: var(--s-4);
+  color: var(--inverse-muted);
+  max-width: 46ch;
+}
+.sessions {
+  margin: var(--s-6) 0 var(--s-6);
+  border-top: 1px solid rgb(255 255 255 / 0.12);
+}
+.session {
+  display: grid;
+  gap: 2px;
+  padding: var(--s-4) 0;
+  border-bottom: 1px solid rgb(255 255 255 / 0.12);
+  transition: padding-left var(--t-med) var(--ease-out), color var(--t-fast);
+}
+.session:hover {
+  padding-left: var(--s-2);
+}
+.sessionTitle {
+  font-family: var(--font-display-stack);
+  font-variation-settings: "SOFT" 100;
+  font-size: var(--step-1);
+  font-weight: 520;
+}
+.sessionMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-1) var(--s-4);
+  font-size: var(--step--1);
+  color: var(--inverse-muted);
+}
+.fewSeats {
+  color: var(--caramel);
+  font-weight: 600;
+}
+@media (max-width: 860px) {
+  .kitchenGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- newsletter ---------- */
+
+.newsletterInner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--s-6);
+  align-items: center;
+}
+.newsletterInner h2 {
+  font-size: var(--step-3);
+  margin-bottom: var(--s-3);
+}
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+}
+.input {
+  flex: 1 1 240px;
+  min-height: 48px;
+  padding: 0 var(--s-5);
+  border-radius: var(--r-pill);
+  border: 1.5px solid var(--line-strong);
+  background: var(--surface);
+  transition: border-color var(--t-fast), box-shadow var(--t-fast);
+}
+.input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgb(200 137 59 / 0.2);
+}
+.input[aria-invalid="true"] {
+  border-color: var(--danger);
+}
+.error {
+  flex-basis: 100%;
+  color: var(--danger);
+  font-size: var(--step--1);
+  padding-left: var(--s-5);
+}
+.subscribed {
+  padding: var(--s-4) var(--s-5);
+  border-radius: var(--r-md);
+  background: var(--tag-fresh-bg);
+  color: var(--tag-fresh-text);
+  font-weight: 600;
+}
+@media (max-width: 860px) {
+  .newsletterInner {
+    grid-template-columns: 1fr;
+  }
+}

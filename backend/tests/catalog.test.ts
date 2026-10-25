@@ -111,6 +111,18 @@ describe("admin catalogue", () => {
     expect(after.body.product.priceFrom).toBe(119900);
   });
 
+  it("PATCH only changes the fields that were sent", async () => {
+    const { agent } = await makeAdmin();
+    const res = await agent.patch(`/api/v1/admin/products/${data.cookie._id}`).send({ isBestseller: true });
+    expect(res.status).toBe(200);
+    expect(res.body.product).toMatchObject({ isBestseller: true, dietary: ["eggless"], preparationHours: 1, isActive: true });
+
+    const shopper = await signupWeb();
+    const a = await shopper.agent.post("/api/v1/me/addresses").send({ fullName: "Asha", phone: "9876543210", line1: "1 Lane", city: "Pune", state: "MH", pincode: "411001" });
+    const edited = await shopper.agent.patch(`/api/v1/me/addresses/${a.body.address.id}`).send({ line2: "Flat 4" });
+    expect(edited.body.address).toMatchObject({ isDefault: true, label: "Home", line2: "Flat 4" });
+  });
+
   it("validates admin input", async () => {
     const { agent } = await makeAdmin();
     const res = await agent.post("/api/v1/admin/products").send({ name: "X", category: "nope", variants: [] });

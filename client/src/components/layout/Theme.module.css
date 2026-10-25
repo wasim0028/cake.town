@@ -1,0 +1,37 @@
+.toggle {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  overflow: hidden;
+  transition: background-color var(--t-fast);
+}
+@media (hover: hover) {
+  .toggle:hover {
+    background: var(--plate);
+  }
+}
+
+.sun,
+.moon {
+  grid-area: 1 / 1;
+  transition:
+    transform var(--t-slow) var(--ease-spring),
+    opacity var(--t-med) var(--ease-out);
+}
+
+/* Light: the sun is up. Dark: it sets and the moon rises. */
+.moon {
+  transform: translateY(140%) rotate(-40deg);
+  opacity: 0;
+}
+.toggle[data-dark] .sun {
+  transform: translateY(-140%) rotate(60deg);
+  opacity: 0;
+}
+.toggle[data-dark] .moon {
+  transform: none;
+  opacity: 1;
+}

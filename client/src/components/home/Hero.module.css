@@ -1,0 +1,101 @@
+.hero {
+  position: relative;
+  margin-top: calc(var(--nav-h) * -1);
+  padding-top: calc(var(--nav-h) + clamp(var(--s-6), 5vw, var(--s-8)));
+  padding-bottom: clamp(var(--s-7), 6vw, var(--s-9));
+  overflow: hidden;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--s-6);
+}
+
+.copy {
+  position: relative;
+  z-index: 1;
+}
+
+.title {
+  font-size: var(--step-hero);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  font-weight: 600;
+  text-wrap: initial;
+}
+
+.line {
+  display: block;
+  overflow: hidden;
+  /* room for descenders and the softened tops while clipped */
+  padding: 0.04em 0 0.08em;
+  margin: -0.04em 0 -0.08em;
+}
+
+/* Dough rising: each line lifts into place while the letters soften and fill out. */
+.line > span {
+  display: inline-block;
+  animation: rise 1.1s var(--ease-out) both;
+  font-variation-settings: "SOFT" 100, "WONK" 0, "opsz" 144;
+}
+@keyframes rise {
+  from {
+    transform: translateY(105%);
+    font-variation-settings: "SOFT" 0, "WONK" 0, "opsz" 144;
+    font-weight: 300;
+  }
+  60% {
+    transform: translateY(-2%);
+  }
+  to {
+    transform: none;
+    font-variation-settings: "SOFT" 100, "WONK" 0, "opsz" 144;
+    font-weight: 600;
+  }
+}
+
+.accent {
+  color: var(--accent-display);
+}
+
+.lede {
+  margin-top: var(--s-5);
+  max-width: 42ch;
+  animation: rise-in 800ms 520ms var(--ease-out) both;
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  margin-top: var(--s-6);
+  animation: rise-in 800ms 640ms var(--ease-out) both;
+}
+
+.art {
+  position: relative;
+  animation: fade-in 1.2s 200ms var(--ease-out) both;
+}
+
+@media (max-width: 860px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .art {
+    order: -1;
+    max-width: 420px;
+    width: 88%;
+    margin: 0 auto calc(var(--s-5) * -1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .line > span,
+  .lede,
+  .ctas,
+  .art {
+    animation: none;
+  }
+}

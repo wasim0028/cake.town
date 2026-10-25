@@ -1,0 +1,40 @@
+.mark {
+  font-family: var(--font-display-stack);
+  font-weight: 640;
+  font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 48;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--text);
+  white-space: nowrap;
+}
+.md {
+  font-size: 1.7rem;
+}
+.lg {
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+}
+.mark[data-tone="inverse"] {
+  color: var(--inverse-text);
+}
+
+.k {
+  position: relative;
+  color: var(--accent-display);
+}
+.mark[data-tone="inverse"] .k {
+  color: var(--caramel);
+}
+
+/* A cherry sitting on the "t". */
+.cherry {
+  position: absolute;
+  width: 0.36em;
+  height: 0.42em;
+  left: 0.08em;
+  top: -0.3em;
+  transition: transform var(--t-slow) var(--ease-spring);
+  transform-origin: 50% 100%;
+}
+a:hover .cherry {
+  transform: rotate(-14deg) translateY(-2px);
+}

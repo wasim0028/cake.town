@@ -13,3 +13,7 @@ config.env
 
 .DS_Store
 *.log
+
+# generated
+*.tsbuildinfo
+next-env.d.ts

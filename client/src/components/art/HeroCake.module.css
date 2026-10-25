@@ -1,0 +1,51 @@
+.wrap {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  margin-inline: auto;
+  /* soft warm glow behind the cake, like light from the display case */
+  background: radial-gradient(closest-side, rgb(233 196 138 / 0.42), transparent 72%);
+}
+
+.svg {
+  position: relative;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.float {
+  animation: float 6s var(--ease-in-out) infinite;
+  transform-origin: 200px 300px;
+  transform-box: view-box;
+}
+
+.tableShadow {
+  animation: float-shadow 6s var(--ease-in-out) infinite;
+  transform-origin: 200px 404px;
+  transform-box: view-box;
+}
+
+.sprinkles {
+  position: absolute;
+  inset: 0 12% 45% 12%;
+  pointer-events: none;
+}
+.sprinkles span {
+  position: absolute;
+  width: 9px;
+  height: 3.5px;
+  border-radius: 2px;
+  opacity: 0;
+  animation: drift 5.6s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .float,
+  .tableShadow {
+    animation: none;
+  }
+  .sprinkles {
+    display: none;
+  }
+}

@@ -1,0 +1,197 @@
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: var(--nav-h);
+  border-bottom: 1px solid transparent;
+  transition:
+    background-color var(--t-med) var(--ease-out),
+    border-color var(--t-med) var(--ease-out),
+    box-shadow var(--t-med) var(--ease-out);
+}
+
+/* Transparent over the page until you scroll, then a frosted-glass bar. */
+.bar[data-scrolled] {
+  background: var(--nav-glass);
+  backdrop-filter: saturate(1.4) blur(14px);
+  -webkit-backdrop-filter: saturate(1.4) blur(14px);
+  border-bottom-color: var(--line);
+  box-shadow: 0 6px 24px -18px rgb(var(--shadow-color) / 0.5);
+}
+
+.inner {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--s-5);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--r-sm);
+  margin-right: auto;
+}
+
+.nav ul {
+  display: flex;
+  gap: var(--s-1);
+}
+
+.link {
+  position: relative;
+  display: inline-block;
+  padding: var(--s-2) var(--s-3);
+  font-weight: 500;
+  font-size: 0.97rem;
+  color: var(--text);
+}
+/* Underline grows from the left on hover and stays for the current page. */
+.link::after {
+  content: "";
+  position: absolute;
+  left: var(--s-3);
+  right: var(--s-3);
+  bottom: 4px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--t-med) var(--ease-out);
+}
+.link:hover::after,
+.link[aria-current="page"]::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--s-1);
+}
+
+.icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  transition: background-color var(--t-fast);
+}
+@media (hover: hover) {
+  .icon:hover {
+    background: var(--plate);
+  }
+}
+
+.cart {
+  background: var(--text);
+  color: var(--bg);
+}
+@media (hover: hover) {
+  .cart:hover {
+    background: var(--cocoa-soft);
+  }
+}
+
+.badge {
+  position: absolute;
+  top: -3px;
+  right: -5px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  color: var(--cocoa);
+  font-size: 0.72rem;
+  font-weight: 700;
+  border: 2px solid var(--bg);
+  animation: bump 520ms var(--ease-out);
+}
+
+/* Hamburger: three lines that fold into an X. */
+.burger {
+  display: none;
+  position: relative;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  margin-left: calc(var(--s-2) * -1);
+}
+.burger span {
+  position: absolute;
+  left: 11px;
+  right: 11px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition:
+    transform var(--t-med) var(--ease-out),
+    opacity var(--t-fast);
+}
+.burger span:nth-child(1) { top: 14px; }
+.burger span:nth-child(2) { top: 20px; right: 17px; }
+.burger span:nth-child(3) { top: 26px; }
+.burger[data-open] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.burger[data-open] span:nth-child(2) { opacity: 0; transform: translateX(-6px); }
+.burger[data-open] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+.mobileList {
+  display: grid;
+  gap: var(--s-1);
+}
+.mobileLink {
+  display: block;
+  padding: var(--s-2) 0;
+  font-family: var(--font-display-stack);
+  font-variation-settings: "SOFT" 100;
+  font-size: var(--step-3);
+  font-weight: 500;
+  line-height: 1.2;
+}
+.mobileLink[aria-current="page"] {
+  color: var(--accent-display);
+}
+.mobileFooter {
+  margin-top: var(--s-7);
+  padding-top: var(--s-5);
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: var(--s-4);
+}
+.mobileSecondary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  color: var(--text-muted);
+}
+.mobileTheme {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-muted);
+}
+
+@media (max-width: 960px) {
+  .nav {
+    display: none;
+  }
+  .burger {
+    display: block;
+  }
+  .brand {
+    margin-right: auto;
+  }
+}
+
+@media (max-width: 520px) {
+  .hideSm {
+    display: none;
+  }
+}

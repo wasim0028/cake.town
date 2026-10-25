@@ -13,7 +13,7 @@ import { cancelBooking, createBooking } from "../services/bookings";
 import { cache, CACHE_KEYS } from "../services/cache";
 import { deleteImages } from "../services/cloudinary";
 import { conflict, notFound } from "../utils/errors";
-import { paginate, parse, userId } from "../utils/http";
+import { paginate, parse, parsePatch, userId } from "../utils/http";
 
 type ClassLean = BakingClassFields & { _id: mongoose.Types.ObjectId; sessions: (BakingClassFields["sessions"][number] & { _id: mongoose.Types.ObjectId })[] };
 
@@ -109,7 +109,7 @@ export async function createClass(req: Request, res: Response) {
 }
 
 export async function updateClass(req: Request, res: Response) {
-  const input = parse(classUpdateSchema, req.body);
+  const input = parsePatch(classUpdateSchema, req.body);
   const c = await BakingClass.findById(req.params.id);
   if (!c) throw notFound("Class");
   const oldImage = c.image?.publicId;

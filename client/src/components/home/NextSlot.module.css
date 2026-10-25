@@ -1,0 +1,49 @@
+.slot {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  margin-top: var(--s-6);
+  padding: var(--s-2) var(--s-4) var(--s-2) var(--s-3);
+  border-radius: var(--r-pill);
+  background: var(--tag-fresh-bg);
+  color: var(--tag-fresh-text);
+  font-size: 0.93rem;
+  animation: rise-in 800ms 760ms var(--ease-out) both;
+}
+.slot strong {
+  font-weight: 650;
+}
+
+/* A gently pulsing "live" dot. */
+.dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: currentColor;
+  animation: pulse 2.4s var(--ease-out) infinite;
+}
+@keyframes pulse {
+  from {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  to {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slot,
+  .dot::after {
+    animation: none;
+  }
+}

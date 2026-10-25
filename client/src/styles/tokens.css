@@ -1,0 +1,163 @@
+/*
+ * caketown design tokens
+ *
+ * Palette, from the bakery itself:
+ *   flour      page background
+ *   crumb      plates and raised surfaces
+ *   cocoa      text and the dark "oven" sections
+ *   caramel    the brand accent (fills, illustrations, focus); too light for small text on flour
+ *   crust      caramel's darker cousin, used for links and accent text on light backgrounds
+ *   pistachio  a second, rarer accent for eggless / vegan / fresh signals
+ *
+ * Money and layout aside, every color the UI uses goes through a semantic token below,
+ * so dark mode only has to remap these.
+ */
+
+:root {
+  /* raw palette */
+  --flour: #f7f1e7;
+  --flour-raised: #fffdf8;
+  --crumb: #efe5d3;
+  --crumb-deep: #e4d6be;
+  --cocoa: #1f1611;
+  --cocoa-soft: #3a2a20;
+  --caramel: #c8893b;
+  --caramel-deep: #a86a22;
+  --crust: #8a4b1f;
+  --honey: #e9c48a;
+  --pistachio: #8fa87c;
+  --pistachio-deep: #4e6840;
+  --pistachio-wash: #dfe7d3;
+  --berry: #b2443a;
+
+  /* semantic: light */
+  --bg: var(--flour);
+  --surface: var(--flour-raised);
+  --plate: var(--crumb);
+  --plate-rim: var(--crumb-deep);
+  --text: var(--cocoa);
+  --text-muted: #6f6158;
+  --line: #e2d6c3;
+  --line-strong: #cbb99e;
+  --accent: var(--caramel);
+  --accent-display: var(--caramel-deep); /* large text only (3.9:1) */
+  --link: var(--crust);
+  --inverse-bg: var(--cocoa);
+  --inverse-text: #f3eadc;
+  --inverse-muted: #b3a495;
+  --tag-fresh-bg: var(--pistachio-wash);
+  --tag-fresh-text: var(--pistachio-deep);
+  --danger: var(--berry);
+  --focus: var(--caramel-deep);
+  --shadow-color: 31 22 17;
+  --overlay: rgb(31 22 17 / 0.45);
+  --nav-glass: rgb(247 241 231 / 0.78);
+  --sheen: rgb(255 253 248 / 0.55);
+
+  /* type */
+  --font-display-stack: var(--font-display), "Iowan Old Style", Georgia, serif;
+  --font-body-stack: var(--font-body), system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* major-third scale (1.25) on a 17px base */
+  --step--1: 0.85rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.33rem;
+  --step-2: 1.66rem;
+  --step-3: 2.07rem;
+  --step-4: 2.59rem;
+  --step-5: clamp(2.6rem, 2rem + 3vw, 3.24rem);
+  --step-hero: clamp(3.1rem, 1.6rem + 6.4vw, 6.6rem);
+
+  /* space (8px grid) */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-7: 3rem;
+  --s-8: 4rem;
+  --s-9: 6rem;
+  --s-10: 8rem;
+
+  --gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+  --content: 76rem;
+  --measure: 62ch;
+
+  /* shape: soft like dough, but not one radius for everything */
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 24px;
+  --r-pill: 999px;
+
+  /* layered, warm shadows (tinted with cocoa, never grey) */
+  --shadow-1: 0 1px 2px rgb(var(--shadow-color) / 0.06), 0 2px 6px rgb(var(--shadow-color) / 0.05);
+  --shadow-2: 0 2px 4px rgb(var(--shadow-color) / 0.06), 0 10px 24px -6px rgb(var(--shadow-color) / 0.14);
+  --shadow-3: 0 4px 8px rgb(var(--shadow-color) / 0.08), 0 24px 48px -12px rgb(var(--shadow-color) / 0.24);
+
+  /* motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --t-fast: 160ms;
+  --t-med: 280ms;
+  --t-slow: 520ms;
+
+  --nav-h: 72px;
+  color-scheme: light;
+}
+
+/* Dark mode: follow the system unless the person picked a theme. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #17110d;
+    --surface: #231a14;
+    --plate: #2c211a;
+    --plate-rim: #3a2c22;
+    --text: #f3eadc;
+    --text-muted: #b3a495;
+    --line: #3a2c22;
+    --line-strong: #54412f;
+    --accent: #d9a15b;
+    --accent-display: #d9a15b;
+    --link: #e0b072;
+    --inverse-bg: #0f0b08;
+    --inverse-text: #f3eadc;
+    --inverse-muted: #a8988a;
+    --tag-fresh-bg: #2a3324;
+    --tag-fresh-text: #a9c196;
+    --danger: #e0786e;
+    --focus: #e0b072;
+    --shadow-color: 0 0 0;
+    --overlay: rgb(0 0 0 / 0.6);
+    --nav-glass: rgb(23 17 13 / 0.78);
+    --sheen: rgb(255 255 255 / 0.06);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #17110d;
+  --surface: #231a14;
+  --plate: #2c211a;
+  --plate-rim: #3a2c22;
+  --text: #f3eadc;
+  --text-muted: #b3a495;
+  --line: #3a2c22;
+  --line-strong: #54412f;
+  --accent: #d9a15b;
+  --accent-display: #d9a15b;
+  --link: #e0b072;
+  --inverse-bg: #0f0b08;
+  --inverse-text: #f3eadc;
+  --inverse-muted: #a8988a;
+  --tag-fresh-bg: #2a3324;
+  --tag-fresh-text: #a9c196;
+  --danger: #e0786e;
+  --focus: #e0b072;
+  --shadow-color: 0 0 0;
+  --overlay: rgb(0 0 0 / 0.6);
+  --nav-glass: rgb(23 17 13 / 0.78);
+  --sheen: rgb(255 255 255 / 0.06);
+  color-scheme: dark;
+}

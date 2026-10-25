@@ -17,7 +17,7 @@ import { cache, CACHE_KEYS, invalidateCatalog } from "../services/cache";
 import { presentProduct } from "../services/catalog";
 import { deleteImages } from "../services/cloudinary";
 import { conflict, notFound } from "../utils/errors";
-import { paginate, parse, userId } from "../utils/http";
+import { paginate, parse, parsePatch, userId } from "../utils/http";
 
 const reviewModerationSchema = z.object({ isHidden: z.boolean() });
 
@@ -54,7 +54,7 @@ export async function createCategory(req: Request, res: Response) {
 }
 
 export async function updateCategory(req: Request, res: Response) {
-  const input = parse(categoryInputSchema.partial(), req.body);
+  const input = parsePatch(categoryInputSchema.partial(), req.body);
   const category = await Category.findById(req.params.id);
   if (!category) throw notFound("Category");
   const oldImage = category.image?.publicId;
@@ -258,7 +258,7 @@ export async function createProduct(req: Request, res: Response) {
 }
 
 export async function updateProduct(req: Request, res: Response) {
-  const input = parse(productUpdateSchema, req.body);
+  const input = parsePatch(productUpdateSchema, req.body);
   const product: ProductDoc | null = await Product.findById(req.params.id);
   if (!product) throw notFound("Product");
   if (input.category && !(await Category.exists({ _id: input.category }))) throw notFound("Category");

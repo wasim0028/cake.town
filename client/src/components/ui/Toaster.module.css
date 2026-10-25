@@ -1,0 +1,56 @@
+.region {
+  position: fixed;
+  z-index: 80;
+  left: 50%;
+  bottom: max(var(--s-5), env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  display: grid;
+  gap: var(--s-2);
+  width: min(420px, calc(100vw - 2rem));
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-3) var(--s-3) var(--s-4);
+  border-radius: var(--r-md);
+  background: var(--inverse-bg);
+  color: var(--inverse-text);
+  box-shadow: var(--shadow-3);
+  animation: toast-in var(--t-med) var(--ease-spring);
+}
+
+.icon {
+  flex-shrink: 0;
+}
+.success .icon {
+  color: var(--pistachio);
+}
+.error .icon {
+  color: #f0a39b;
+}
+
+.text {
+  flex: 1;
+  display: grid;
+  font-size: 0.93rem;
+  line-height: 1.4;
+}
+.text span {
+  color: var(--inverse-muted);
+}
+
+.dismiss {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: var(--inverse-muted);
+}
+.dismiss:hover {
+  color: var(--inverse-text);
+}
