@@ -1,8 +1,7 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { X } from "lucide-react";
-import { useEffect, useId, useRef, type ReactNode } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { getLenis } from "@/components/layout/SmoothScroll";
 import styles from "./Drawer.module.css";
@@ -21,11 +20,25 @@ const FOCUSABLE = 'a[href],button:not([disabled]),input:not([disabled]),select,t
 /**
  * Side panel (cart, mobile menu). Traps focus while open, closes on Esc or overlay click,
  * pauses smooth scrolling behind it and puts focus back where it was afterwards.
+ * The slide is plain CSS (no animation library), so it costs nothing until it's opened.
  */
 export function Drawer({ open, onClose, title, side = "right", children, footer }: DrawerProps) {
   const panel = useRef<HTMLDivElement>(null);
   const titleId = useId();
-  const reduce = useReducedMotion();
+  // Stay mounted for the closing slide, then unmount.
+  const [mounted, setMounted] = useState(open);
+  const [shown, setShown] = useState(false);
+  useEffect(() => {
+    if (open) {
+      setMounted(true);
+      let inner = 0;
+      const outer = requestAnimationFrame(() => (inner = requestAnimationFrame(() => setShown(true))));
+      return () => (cancelAnimationFrame(outer), cancelAnimationFrame(inner));
+    }
+    setShown(false);
+    const t = setTimeout(() => setMounted(false), 380);
+    return () => clearTimeout(t);
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -62,45 +75,23 @@ export function Drawer({ open, onClose, title, side = "right", children, footer 
 
   if (typeof document === "undefined") return null;
 
-  const offscreen = side === "right" ? "100%" : "-100%";
+  if (!mounted) return null;
   return createPortal(
-    <AnimatePresence>
-      {open && (
-        <div className={styles.root} data-side={side}>
-          <motion.div
-            className={styles.overlay}
-            onClick={onClose}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: reduce ? 0 : 0.25 }}
-          />
-          <motion.div
-            ref={panel}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby={titleId}
-            className={styles.panel}
-            initial={reduce ? { opacity: 0 } : { x: offscreen }}
-            animate={reduce ? { opacity: 1 } : { x: 0 }}
-            exit={reduce ? { opacity: 0 } : { x: offscreen }}
-            transition={{ type: "spring", stiffness: 380, damping: 38, mass: 0.9 }}
-            data-lenis-prevent
-          >
-            <header className={styles.header}>
-              <h2 id={titleId} className={styles.title}>
-                {title}
-              </h2>
-              <button className={styles.close} onClick={onClose} aria-label="Close">
-                <X size={20} />
-              </button>
-            </header>
-            <div className={styles.body}>{children}</div>
-            {footer && <footer className={styles.footer}>{footer}</footer>}
-          </motion.div>
-        </div>
-      )}
-    </AnimatePresence>,
+    <div className={styles.root} data-side={side} data-state={shown ? "open" : "closed"}>
+      <div className={styles.overlay} onClick={onClose} />
+      <div ref={panel} role="dialog" aria-modal="true" aria-labelledby={titleId} className={styles.panel} data-lenis-prevent>
+        <header className={styles.header}>
+          <h2 id={titleId} className={styles.title}>
+            {title}
+          </h2>
+          <button className={styles.close} onClick={onClose} aria-label="Close">
+            <X size={20} />
+          </button>
+        </header>
+        <div className={styles.body}>{children}</div>
+        {footer && <footer className={styles.footer}>{footer}</footer>}
+      </div>
+    </div>,
     document.body,
   );
 }

@@ -161,3 +161,33 @@ describe("phone OTP", () => {
     expect(ok.body.accessToken).toBeTruthy();
   });
 });
+
+describe("web session on page load", () => {
+  it("answers guests with user: null instead of a 401", async () => {
+    const res = await api().get("/api/v1/auth/session").expect(200);
+    expect(res.body.user).toBeNull();
+  });
+
+  it("returns the signed-in user", async () => {
+    const { agent, user } = await signupWeb();
+    const res = await agent.get("/api/v1/auth/session").expect(200);
+    expect(res.body.user.id).toBe(user.id);
+  });
+
+  it("renews the session when only the refresh cookie is left (access cookie expired)", async () => {
+    const signup = await api()
+      .post("/api/v1/auth/signup")
+      .send({ name: "Lapsed Visitor", email: `lapsed.${Date.now()}@example.com`, phone: "9811100022", password: "Cakes1234", confirmPassword: "Cakes1234" })
+      .expect(201);
+    const refresh = cookieHeader(signup).find((c) => c.startsWith("ct_rt="))!.split(";")[0]!;
+    // The browser drops ct_at after 15 minutes; only ct_rt is sent.
+    const res = await api().get("/api/v1/auth/session").set("Cookie", refresh).expect(200);
+    expect(res.body.user.email).toMatch(/^lapsed\./);
+    const cookies = cookieHeader(res);
+    expect(cookies.some((c) => c.startsWith("ct_at="))).toBe(true);
+    expect(cookies.some((c) => c.startsWith("ct_rt=") && !c.includes(refresh.slice(6)))).toBe(true);
+    // The old refresh token was rotated out and can't be used again.
+    const again = await api().get("/api/v1/auth/session").set("Cookie", refresh).expect(200);
+    expect(again.body.user).toBeNull();
+  });
+});

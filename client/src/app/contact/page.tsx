@@ -1,13 +1,10 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/site";
 import { ContactForm } from "@/components/content/ContactForm";
 import { PageHeader } from "@/components/layout/PageHeader";
 import styles from "../content.module.css";
 
-export const metadata: Metadata = {
-  title: "Contact us",
-  description: "Questions about an order, a custom or wedding cake, or a class? Write to caketown and we'll reply within a day.",
-  alternates: { canonical: "/contact" },
-};
+export const metadata: Metadata = pageMeta({ title: "Contact us", description: "Questions about an order, a custom or wedding cake, or a class? Write to caketown and we'll reply within a day.", path: "/contact" });
 
 /** Set NEXT_PUBLIC_SHOP_MAP_QUERY (e.g. "caketown, 12 Park Street, City") to show a map. */
 const MAP_QUERY = process.env.NEXT_PUBLIC_SHOP_MAP_QUERY;

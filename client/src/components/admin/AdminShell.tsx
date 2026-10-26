@@ -107,6 +107,9 @@ export function AdminShell({ children }: { children: ReactNode }) {
 
   return (
     <div className={styles.shell}>
+      <a href="#main" className="skip-link">
+        Skip to content
+      </a>
       <aside className={styles.side} data-open={open || undefined}>
         <div className={styles.brand}>
           <Link href="/admin" aria-label="caketown admin home">

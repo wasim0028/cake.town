@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/site";
 import { Prose } from "@/components/content/Prose";
 import { PageHeader } from "@/components/layout/PageHeader";
 
-export const metadata: Metadata = { title: "Terms of service", alternates: { canonical: "/terms" } };
+export const metadata: Metadata = pageMeta({ title: "Terms of service", description: "Ordering, delivery slots, cancellations, refunds and baking classes at caketown.", path: "/terms" });
 
 export default function TermsPage() {
   return (

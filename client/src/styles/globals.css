@@ -193,7 +193,8 @@ p {
 
 /* ---------- page transition (see app/template.tsx) ---------- */
 
-.page-enter {
+/* Only after the first in-app navigation: the first page load paints instantly (better LCP). */
+html[data-navigated] .page-enter {
   animation: page-in 450ms var(--ease-out) both;
 }
 /* Ends on transform: none so no containing block is left behind for fixed/sticky children. */

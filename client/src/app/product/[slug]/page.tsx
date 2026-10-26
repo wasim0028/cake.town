@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { abs, pageMeta } from "@/lib/site";
 import { fromPaise } from "@caketown/shared";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Reveal } from "@/components/layout/Reveal";
@@ -21,12 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const p = await getProduct(slug);
   if (!p) return { title: "Not found" };
   const description = p.shortDescription ?? p.description.slice(0, 155);
-  return {
-    title: p.name,
-    description,
-    alternates: { canonical: `/product/${p.slug}` },
-    openGraph: { title: `${p.name} · caketown`, description, images: p.images[0] ? [{ url: p.images[0].url }] : undefined },
-  };
+  return pageMeta({ title: p.name, description, path: `/product/${p.slug}`, image: false });
 }
 
 export default async function ProductPage({ params }: Props) {
@@ -42,6 +39,8 @@ export default async function ProductPage({ params }: Props) {
     name: product.name,
     description: product.description,
     image: product.images.map((i) => i.url),
+    url: abs(`/product/${product.slug}`),
+    sku: product.slug,
     brand: { "@type": "Brand", name: "caketown" },
     category: product.category.name,
     offers: {
@@ -59,7 +58,7 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+      <JsonLd data={jsonLd} />
       <div className={`container ${styles.layout}`}>
         <Gallery product={product} />
         <div className={styles.info}>

@@ -27,7 +27,8 @@ npm test                                 # 59 API tests
 ```
 
 Every external service is optional and switches on when its keys are added to `backend/.env`.
-See [backend/README.md](backend/README.md) for the API reference and [client/README.md](client/README.md) for the design system and animations.
+See [backend/README.md](backend/README.md) for the API reference, [client/README.md](client/README.md) for the design system and animations,
+and **[DEPLOY.md](DEPLOY.md) to put the shop online** (Vercel, Render, MongoDB Atlas, Expo EAS).
 
 ### Admin
 
@@ -57,4 +58,9 @@ Point `MONGODB_URI` at the existing database and run `npm run migrate:users` onc
   categories, baking classes with dates and bookings, coupons, customers and admin roles, review
   moderation, and the contact inbox. New orders show up as a badge, a toast and a count in the
   browser tab within 30 seconds.
-- **F. Polish:** SEO, accessibility, Lighthouse, deployment guide.
+- **F. Polish** ✅ search engines (titles, descriptions and canonical links on every page, share
+  images drawn per product, sitemap of every product, robots, structured data for the bakery,
+  products, breadcrumbs, class dates as events and recipes), accessibility (axe: no WCAG 2.2 AA
+  issues on any public or admin page, light and dark, phone and desktop), speed (CSS-only drawers,
+  smooth scroll loaded after the page, first paint not held back by animations), people stay signed
+  in across visits, and a step-by-step [deployment guide](DEPLOY.md).

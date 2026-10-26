@@ -32,7 +32,7 @@ Text colours meet WCAG AA: caramel is only used for fills and large display text
 | Products | Bake lifts off the plate on hover, breads steam, "Add" rises into view, item flies into the cart, badge bumps, heart bursts | CSS + Web Animations API |
 | Buttons | Ripple from the press point, caramel sheen sweep on primary | `Button.tsx` |
 | Navbar | Transparent → frosted glass on scroll, underline grows on links, hamburger folds into an X | CSS |
-| Cart & menu | Spring slide-in drawers with focus trap and Esc to close | Motion (`motion/react`) |
+| Cart & menu | Slide-in drawers with focus trap and Esc to close | CSS transitions (no library, so nothing loads until opened) |
 | Cursor | Caramel dot that swells over clickable things (desktop mouse only) | `Cursor.tsx` |
 | Everywhere | Skeleton shimmer, toasts | CSS |
 

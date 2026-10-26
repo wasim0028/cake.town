@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/site";
 import { CakeBuilder } from "@/components/builder/CakeBuilder";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Button } from "@/components/ui/Button";
 import { getProduct } from "@/lib/server-api";
 
-export const metadata: Metadata = {
-  title: "Design a cake",
-  description: "Choose the shape, size, sponge, frosting and toppings, add a message, and watch your cake come together before you order.",
-  alternates: { canonical: "/cake-builder" },
-};
+export const metadata: Metadata = pageMeta({ title: "Design a cake", description: "Choose the shape, size, sponge, frosting and toppings, add a message, and watch your cake come together before you order.", path: "/cake-builder" });
 
 export const revalidate = 60;
 

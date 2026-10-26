@@ -28,6 +28,7 @@ a.post("/login", authLimiter, auth.login);
 a.post("/refresh", auth.refresh);
 a.post("/logout", auth.logout);
 a.post("/logout-all", requireAuth, auth.logoutAll);
+a.get("/session", optionalAuth, auth.session);
 a.get("/me", requireAuth, auth.me);
 a.patch("/me", requireAuth, auth.updateMe);
 a.post("/change-password", requireAuth, authLimiter, auth.changePassword);

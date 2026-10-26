@@ -46,7 +46,7 @@ exercise real transactions. No external services are called.
 
 | Client | How |
 |---|---|
-| Web | `POST /auth/login` sets two httpOnly cookies: `ct_at` (access, 15 min) and `ct_rt` (refresh, 30 days, path `/api/v1/auth`). Send requests with `credentials: "include"`. On `401 TOKEN_EXPIRED`, call `POST /auth/refresh` and retry. |
+| Web | `POST /auth/login` sets two httpOnly cookies: `ct_at` (access, 15 min) and `ct_rt` (refresh, 30 days, path `/api/v1/auth`). Send requests with `credentials: "include"`. On `401 TOKEN_EXPIRED` (or `401` once `ct_at` has lapsed), call `POST /auth/refresh` and retry. On page load call `GET /auth/session`: it returns `{ user }` or `{ user: null }` (never 401) and renews the session when only `ct_rt` is left. |
 | Mobile | Send header `X-Client: mobile`. Tokens come back in the body (`accessToken`, `refreshToken`); store them in SecureStore and send `Authorization: Bearer <accessToken>`. Refresh with `POST /auth/refresh { refreshToken }`. |
 
 Refresh tokens rotate on every use (an old one stops working), and up to 10 devices stay signed in.
@@ -60,6 +60,7 @@ Refresh tokens rotate on every use (an old one stops working), and up to 10 devi
 | POST | `/login` | `{ email, password }` |
 | POST | `/refresh` | cookie or `{ refreshToken }` |
 | POST | `/logout` · `/logout-all` | |
+| GET | `/session` | `{ user }` or `{ user: null }`; renews from the refresh cookie when the access cookie has lapsed |
 | GET / PATCH | `/me` | profile: `{ name?, phone?, avatar? }` |
 | POST | `/change-password` | `{ currentPassword, newPassword }` signs out other devices |
 | POST | `/forgot-password` · `/reset-password` | email link valid 30 min; `{ token, password }` |

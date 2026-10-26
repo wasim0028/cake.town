@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/site";
 import { Suspense } from "react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { ShopView } from "@/components/shop/ShopView";
 import { getCategories, getProducts } from "@/lib/server-api";
 
-export const metadata: Metadata = {
-  title: "The menu",
-  description: "Cakes, breads, pastries, cupcakes and cookies from caketown, baked fresh and delivered in a slot you choose.",
-  alternates: { canonical: "/shop" },
-};
+export const metadata: Metadata = pageMeta({ title: "The menu", description: "Cakes, breads, pastries, cupcakes and cookies from caketown, baked fresh and delivered in a slot you choose.", path: "/shop" });
 
 export const revalidate = 120;
 
