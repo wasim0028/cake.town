@@ -1,0 +1,104 @@
+.dayPick {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2);
+  margin-bottom: var(--s-5);
+}
+.empty {
+  padding: var(--s-7);
+  text-align: center;
+  color: var(--text-muted);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--r-md);
+}
+.tally {
+  padding: var(--s-5);
+  border-radius: var(--r-md);
+  background: var(--plate);
+  margin-bottom: var(--s-6);
+}
+.tally h2,
+.slot h2 {
+  font-size: var(--step-1);
+  margin-bottom: var(--s-3);
+}
+.tally ul {
+  columns: 2 260px;
+  column-gap: var(--s-6);
+}
+.tally li {
+  break-inside: avoid;
+  padding: 3px 0;
+}
+.tally strong {
+  font-variant-numeric: tabular-nums;
+  display: inline-block;
+  min-width: 2.2em;
+}
+.slot {
+  margin-bottom: var(--s-6);
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--s-3);
+}
+.card {
+  display: grid;
+  gap: var(--s-3);
+  align-content: start;
+  padding: var(--s-4);
+  border-radius: var(--r-md);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  break-inside: avoid;
+}
+.card header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-2);
+}
+.card header a {
+  font-weight: 700;
+}
+.items {
+  display: grid;
+  gap: var(--s-2);
+}
+.egg {
+  margin-left: 6px;
+  padding: 0 6px;
+  border-radius: var(--r-pill);
+  background: var(--tag-fresh-bg);
+  color: var(--tag-fresh-text);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.msg {
+  margin-top: 2px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.card footer {
+  border-top: 1px solid var(--line);
+  padding-top: var(--s-2);
+}
+.cod {
+  margin-top: 4px;
+  font-weight: 700;
+  color: var(--danger);
+}
+@media print {
+  .dayPick {
+    display: none;
+  }
+  .card {
+    border-color: #999;
+  }
+  .tally {
+    background: none;
+    border: 1px solid #999;
+  }
+}

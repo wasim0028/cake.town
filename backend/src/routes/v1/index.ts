@@ -116,11 +116,16 @@ ad.post("/products", catalog.createProduct);
 ad.patch("/products/:id", catalog.updateProduct);
 ad.delete("/products/:id", catalog.deleteProduct);
 
+ad.get("/categories", catalog.adminListCategories);
 ad.post("/categories", catalog.createCategory);
 ad.patch("/categories/:id", catalog.updateCategory);
 ad.delete("/categories/:id", catalog.deleteCategory);
 
+ad.get("/reviews", catalog.adminListReviews);
 ad.patch("/reviews/:id", catalog.moderateReview);
+
+ad.get("/messages", misc.adminListMessages);
+ad.patch("/messages/:id", misc.adminUpdateMessage);
 
 ad.get("/classes", classes.adminListClasses);
 ad.post("/classes", classes.createClass);

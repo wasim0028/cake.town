@@ -1,0 +1,29 @@
+.prod {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  min-width: 220px;
+}
+.prod img,
+.noImg {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: var(--r-sm);
+  object-fit: cover;
+  background: var(--plate);
+}
+.stock {
+  display: inline-block;
+  margin: 1px 6px 1px 0;
+  padding: 0 6px;
+  border-radius: var(--r-sm);
+  background: var(--plate);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.stock[data-low] {
+  background: color-mix(in srgb, var(--danger) 14%, transparent);
+  color: var(--danger);
+  font-weight: 600;
+}

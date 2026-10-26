@@ -259,6 +259,50 @@ export async function moderateReview(req: Request, res: Response) {
   res.json({ review });
 }
 
+/* ---------- admin lists ---------- */
+
+/** All categories, including hidden ones, with how many products each holds. */
+export async function adminListCategories(_req: Request, res: Response) {
+  const [cats, counts] = await Promise.all([
+    Category.find().sort({ sortOrder: 1, name: 1 }).lean(),
+    Product.aggregate<{ _id: mongoose.Types.ObjectId; n: number }>([{ $group: { _id: "$category", n: { $sum: 1 } } }]),
+  ]);
+  const countBy = new Map(counts.map((c) => [String(c._id), c.n]));
+  res.json({ items: cats.map((c) => ({ ...c, id: String(c._id), _id: undefined, __v: undefined, productCount: countBy.get(String(c._id)) ?? 0 })) });
+}
+
+/** Newest reviews first; `?hidden=true` shows only hidden ones, `?rating=1` filters by stars. */
+export async function adminListReviews(req: Request, res: Response) {
+  const { page, limit } = parse(paginationSchema, req.query);
+  const filter: Record<string, unknown> = {};
+  if (req.query.hidden === "true") filter.isHidden = true;
+  if (req.query.hidden === "false") filter.isHidden = false;
+  const rating = Number(req.query.rating);
+  if (rating >= 1 && rating <= 5) filter.rating = rating;
+  const [items, total] = await Promise.all([
+    Review.find(filter).sort({ createdAt: -1 }).skip((page - 1) * limit).limit(limit).populate("user", "name email").populate("product", "name slug").lean(),
+    Review.countDocuments(filter),
+  ]);
+  res.json(
+    paginate(
+      items.map((r) => ({
+        id: String(r._id),
+        rating: r.rating,
+        title: r.title,
+        comment: r.comment,
+        isHidden: r.isHidden,
+        verifiedPurchase: r.verifiedPurchase,
+        createdAt: r.createdAt,
+        user: r.user,
+        product: r.product,
+      })),
+      total,
+      page,
+      limit,
+    ),
+  );
+}
+
 /* ---------- products (admin) ---------- */
 
 function variantsWithIds(variants: { id?: string; label: string }[]) {
@@ -268,7 +312,12 @@ function variantsWithIds(variants: { id?: string; label: string }[]) {
 export async function adminListProducts(req: Request, res: Response) {
   const { page, limit } = parse(paginationSchema, req.query);
   const q = typeof req.query.q === "string" ? req.query.q.trim() : "";
-  const filter = q ? { name: { $regex: q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), $options: "i" } } : {};
+  const filter: FilterQuery<ProductFields> = q ? { name: { $regex: q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), $options: "i" } } : {};
+  if (typeof req.query.category === "string" && mongoose.isValidObjectId(req.query.category)) filter.category = req.query.category;
+  if (req.query.status === "active") filter.isActive = true;
+  if (req.query.status === "hidden") filter.isActive = false;
+  // Low stock: any size at or below the product's own threshold.
+  if (req.query.status === "low") filter.$expr = { $gt: [{ $size: { $filter: { input: "$variants", cond: { $lte: ["$$this.stock", "$lowStockThreshold"] } } } }, 0] };
   const [items, total] = await Promise.all([
     Product.find(filter).sort({ updatedAt: -1 }).skip((page - 1) * limit).limit(limit).populate("category", "name slug").lean(),
     Product.countDocuments(filter),

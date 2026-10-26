@@ -5,7 +5,7 @@ import { features } from "../config/env";
 import { ContactMessage, DeviceToken, Subscriber } from "../models";
 import { deleteImages, uploadImage, type ImageFolder } from "../services/cloudinary";
 import { notifyContact } from "../services/notify";
-import { badRequest } from "../utils/errors";
+import { badRequest, notFound } from "../utils/errors";
 import { parse, userId } from "../utils/http";
 
 /* ---------- push notification devices ---------- */
@@ -39,6 +39,27 @@ export async function subscribe(req: Request, res: Response) {
   const { email } = parse(newsletterSchema, req.body);
   await Subscriber.updateOne({ email }, { $set: { email }, $unset: { unsubscribedAt: 1 } }, { upsert: true });
   res.status(201).json({ message: "You're on the list! 🎉" });
+}
+
+/* ---------- contact inbox (admin) ---------- */
+
+export async function adminListMessages(req: Request, res: Response) {
+  const page = Math.max(1, Number(req.query.page) || 1);
+  const limit = Math.min(60, Math.max(1, Number(req.query.limit) || 20));
+  const filter = req.query.handled === "false" ? { handled: false } : req.query.handled === "true" ? { handled: true } : {};
+  const [items, total, open] = await Promise.all([
+    ContactMessage.find(filter).sort({ createdAt: -1 }).skip((page - 1) * limit).limit(limit),
+    ContactMessage.countDocuments(filter),
+    ContactMessage.countDocuments({ handled: false }),
+  ]);
+  res.json({ items, page, limit, total, totalPages: Math.max(1, Math.ceil(total / limit)), open });
+}
+
+export async function adminUpdateMessage(req: Request, res: Response) {
+  const { handled } = parse(z.object({ handled: z.boolean() }), req.body);
+  const msg = await ContactMessage.findByIdAndUpdate(req.params.id, { $set: { handled } }, { new: true });
+  if (!msg) throw notFound("Message");
+  res.json({ message: msg });
 }
 
 /* ---------- image uploads (admin) ---------- */
