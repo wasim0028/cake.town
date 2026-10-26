@@ -99,7 +99,7 @@ after `PAYMENT_HOLD_MINUTES`; a payment that arrives after that is refunded auto
 
 ### Account `/me` (login required)
 `GET/POST /addresses`, `PATCH/DELETE /addresses/:id` · `GET /wishlist`, `PUT/DELETE /wishlist/:productId` ·
-`GET /bookings` · `POST /devices { token, platform }`, `DELETE /devices/:token` (Expo push tokens)
+`GET /bookings` · `POST /devices { token, platform }`, `DELETE /devices/:token` (Expo push tokens) · phones signed in to an admin account also get a push for every new order and contact message
 
 ### Baking classes
 `GET /classes` · `GET /classes/:slug` · `POST /bookings { classId, sessionId, seats, paymentMethod: "pay_at_venue"|"razorpay" }` ·

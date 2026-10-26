@@ -23,7 +23,7 @@ cp client/.env.example client/.env.local
 npm run seed                             # sample catalogue + admin user
 npm run dev:api                          # API → http://localhost:5000/health
 npm run dev:web                          # in a second terminal → http://localhost:3000
-npm test                                 # 58 API tests
+npm test                                 # 59 API tests
 ```
 
 Every external service is optional and switches on when its keys are added to `backend/.env`.

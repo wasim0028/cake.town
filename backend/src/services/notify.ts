@@ -11,7 +11,7 @@ import {
   welcomeEmail,
 } from "../templates/emails";
 import { sendEmail } from "./email";
-import { sendPushToUser } from "./push";
+import { sendPushToAdmins, sendPushToUser } from "./push";
 import { sendSms } from "./sms";
 
 /**
@@ -69,6 +69,18 @@ export function notifyOrderStatus(order: OrderDoc) {
     if (status === "placed" && env.SHOP_EMAIL) {
       jobs.push(sendEmail({ to: env.SHOP_EMAIL, ...newOrderShopEmail(order) }));
     }
+    if (status === "placed") {
+      // Staff phones: opens the order in the app's Staff section.
+      const first = order.items[0];
+      const more = order.items.length > 1 ? ` + ${order.items.length - 1} more` : "";
+      jobs.push(
+        sendPushToAdmins({
+          title: `New order · ${formatINR(order.total)}`,
+          body: `${first ? `${first.quantity}× ${first.name}${more}` : order.orderNumber} for ${order.deliveryDate}, ${order.deliverySlot}`,
+          data: { screen: "staff-order", id },
+        }),
+      );
+    }
 
     const results = await Promise.allSettled(jobs);
     for (const r of results) if (r.status === "rejected") logger.warn({ err: r.reason, order: order.orderNumber }, "Notification channel failed");
@@ -104,6 +116,8 @@ export function notifyOtp(phone: string, code: string) {
 }
 
 export function notifyContact(m: { name: string; email: string; phone?: string; subject?: string; message: string }) {
-  if (!env.SHOP_EMAIL) return;
-  background("notify:contact", () => sendEmail({ to: env.SHOP_EMAIL!, replyTo: m.email, ...contactNotificationEmail(m) }));
+  if (env.SHOP_EMAIL) background("notify:contact", () => sendEmail({ to: env.SHOP_EMAIL!, replyTo: m.email, ...contactNotificationEmail(m) }));
+  background("notify:contact:push", () =>
+    sendPushToAdmins({ title: `Message from ${m.name}`, body: (m.subject ? `${m.subject}: ` : "") + m.message.slice(0, 120), data: { screen: "staff-messages" } }),
+  );
 }
