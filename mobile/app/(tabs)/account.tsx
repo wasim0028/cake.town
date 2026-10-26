@@ -1,8 +1,9 @@
 import { useRouter } from "expo-router";
-import { CalendarHeart, ChevronRight, Heart, LogOut, MapPin, Package, Settings } from "lucide-react-native";
+import { CalendarHeart, ChefHat, ChevronRight, Heart, LogOut, MapPin, Package, Settings } from "lucide-react-native";
 import { View } from "react-native";
 import { ORDER_STATUS_LABELS, formatINR, type OrderStatus } from "@caketown/shared";
 import { Row, Screen } from "@/components/Screen";
+import { Count, useStaffCounts } from "@/components/staff";
 import { Button, Card, H, Plate, Press, T } from "@/components/ui";
 import { signOut } from "@/lib/auth";
 import { haptic } from "@/lib/haptics";
@@ -27,6 +28,7 @@ export default function AccountTab() {
   const { c } = useTheme();
   const user = useAuth((s) => s.user);
   const orders = useOrders(Boolean(user));
+  const staff = useStaffCounts();
 
   if (!user) {
     return (
@@ -57,6 +59,22 @@ export default function AccountTab() {
           <T size="sm" tone="muted">{user.email}</T>
         </View>
       </Row>
+
+      {user.role === "admin" && (
+        <Press onPress={() => router.push("/staff")} accessibilityRole="button" accessibilityLabel="Open the staff section" scaleTo={0.98}>
+          <Card style={{ backgroundColor: c.accent, borderColor: c.accent, flexDirection: "row", alignItems: "center", gap: 14 }}>
+            <ChefHat size={26} color="#1F1611" />
+            <View style={{ flex: 1 }}>
+              <H size="lg" style={{ color: "#1F1611" }}>Staff</H>
+              <T size="sm" style={{ color: "#1F1611" }}>
+                {staff.newOrders ? `${staff.newOrders} new order${staff.newOrders === 1 ? "" : "s"} to start` : "Orders, kitchen list and stock"}
+              </T>
+            </View>
+            <Count n={staff.newOrders} />
+            <ChevronRight size={20} color="#1F1611" />
+          </Card>
+        </Press>
+      )}
 
       {active && (
         <Press onPress={() => router.push({ pathname: "/order/[id]", params: { id: active.id } })} accessibilityRole="button" scaleTo={0.98}>

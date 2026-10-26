@@ -1,5 +1,7 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { Category, Product } from "../src/models";
+import { flushBackground } from "../src/services/notify";
+import { sentPush } from "../src/services/push";
 import { address, api, deliveryDate, makeAdmin, seedCatalog, signupWeb } from "./helpers";
 
 let data: Awaited<ReturnType<typeof seedCatalog>>;
@@ -69,5 +71,26 @@ describe("admin lists", () => {
     const res = await agent.get(`/api/v1/admin/users?q=${encodeURIComponent(shopper.user.email)}`);
     expect(res.body.items).toHaveLength(1);
     expect(res.body.items[0]).toMatchObject({ email: shopper.user.email, orders: 1, spent: order.body.order.total });
+  });
+
+  it("pushes new orders and messages to admin phones", async () => {
+    const { user: admin } = await makeAdmin();
+    const shopper = await signupWeb();
+    const addr = await shopper.agent.post("/api/v1/me/addresses").send(address).expect(201);
+    await shopper.agent.post("/api/v1/cart/items").send({ productId: String(data.cookie._id), variantId: String(data.cookie.variants[0]!._id) }).expect(201);
+    const before = sentPush.length;
+    const order = await shopper.agent
+      .post("/api/v1/orders")
+      .send({ addressId: addr.body.address.id, deliveryDate: deliveryDate(), deliverySlot: "10:00-13:00", paymentMethod: "cod" })
+      .expect(201);
+    await api().post("/api/v1/contact").send({ name: "Meena", email: "meena@example.com", message: "Do you deliver to Whitefield?" }).expect(201);
+    await flushBackground();
+    const toAdmin = sentPush.slice(before).filter((p) => p.userId === admin.id);
+    expect(toAdmin.map((p) => p.payload.data)).toEqual(
+      expect.arrayContaining([{ screen: "staff-order", id: order.body.order.id }, { screen: "staff-messages" }]),
+    );
+    expect(toAdmin.find((p) => p.payload.data?.screen === "staff-order")?.payload.title).toMatch(/^New order · ₹/);
+    // The customer gets their own "Order placed" push, not the staff one.
+    expect(sentPush.slice(before).some((p) => p.userId === shopper.user.id && p.payload.data?.screen === "order")).toBe(true);
   });
 });

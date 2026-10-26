@@ -15,6 +15,7 @@ import { useCallback, useEffect, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { AnimatedSplash } from "@/components/AnimatedSplash";
+import { StaffWatcher } from "@/components/StaffWatcher";
 import { Toaster } from "@/components/ui";
 import { ApiError, onSessionEnded, restoreSession } from "@/lib/api";
 import { registerForPush, listenForNotificationTaps } from "@/lib/push";
@@ -98,7 +99,9 @@ export default function RootLayout() {
             <Stack.Screen name="login" options={{ presentation: "modal", title: "Sign in" }} />
             <Stack.Screen name="signup" options={{ presentation: "modal", title: "Create account" }} />
             <Stack.Screen name="otp" options={{ presentation: "modal", title: "Sign in with OTP" }} />
+            <Stack.Screen name="staff" options={{ headerShown: false }} />
           </Stack>
+          <StaffWatcher />
           <Toaster />
           {!splashDone && <AnimatedSplash onDone={finishSplash} />}
         </QueryClientProvider>

@@ -1,7 +1,7 @@
 import { Expo, type ExpoPushMessage } from "expo-server-sdk";
 import { env, isTest } from "../config/env";
 import { logger } from "../config/logger";
-import { DeviceToken } from "../models";
+import { DeviceToken, User } from "../models";
 
 let expo: Expo | null = null;
 
@@ -19,7 +19,21 @@ export async function sendPushToUser(userId: string, payload: PushPayload): Prom
     sentPush.push({ userId, payload });
     return;
   }
-  const devices = await DeviceToken.find({ user: userId }).select("token").lean();
+  await sendToDevices({ user: userId }, payload);
+}
+
+/** Every phone signed in to an admin account (the shop's staff), e.g. "New order". */
+export async function sendPushToAdmins(payload: PushPayload): Promise<void> {
+  const admins = await User.find({ role: "admin" }).select("_id").lean();
+  if (isTest) {
+    for (const a of admins) sentPush.push({ userId: String(a._id), payload });
+    return;
+  }
+  if (admins.length) await sendToDevices({ user: { $in: admins.map((a) => a._id) } }, payload);
+}
+
+async function sendToDevices(filter: Record<string, unknown>, payload: PushPayload): Promise<void> {
+  const devices = await DeviceToken.find(filter).select("token").lean();
   const tokens = devices.map((d) => d.token).filter((t) => Expo.isExpoPushToken(t));
   if (!tokens.length) return;
 

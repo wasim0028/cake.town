@@ -210,7 +210,7 @@ export default function Builder() {
                       +{formatINR(p.egglessOption.extraPrice)}
                     </T>
                   </View>
-                  <Switch value={eggless} onValueChange={setEggless} trackColor={{ true: c.fresh, false: c.lineStrong }} thumbColor="#fff" accessibilityLabel="Make it eggless" />
+                  <Switch value={eggless} onValueChange={setEggless} trackColor={{ true: c.fresh, false: c.lineStrong }} thumbColor="#fff" {...({ activeThumbColor: "#fff" } as object)} accessibilityLabel="Make it eggless" />
                 </Row>
               )}
               <Animated.View entering={FadeIn} style={{ backgroundColor: c.freshBg, padding: 14, borderRadius: radius.md }}>

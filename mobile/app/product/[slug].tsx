@@ -182,6 +182,7 @@ export default function ProductScreen() {
                     onValueChange={(v) => (haptic.tap(), setEggless(v))}
                     trackColor={{ true: c.fresh, false: c.lineStrong }}
                     thumbColor="#fff"
+                    {...({ activeThumbColor: "#fff" } as object)}
                     accessibilityLabel="Make it eggless"
                   />
                 </Row>

@@ -31,6 +31,24 @@ A real phone can't reach `localhost` on your computer: use your computer's Wi-Fi
 | Classes | Class list, dates with seats left, booking (pay at the studio or online) |
 | Account | Current order, orders, favourites, addresses, class bookings, settings (theme, notifications) |
 
+### Staff (admin accounts only)
+
+Admins see a **Staff** card at the top of Account. Everyone else never sees these screens, and the
+API refuses them anyway.
+
+| | |
+|---|---|
+| Today | New orders to start, deliveries today, sales today and this week, orders waiting, running low |
+| Orders | New / Baking / Out for delivery / Delivered / All, search, infinite list, refreshes every 30 s |
+| Order | Delivery day and slot, "collect cash" reminder, one big button for the next step (start baking → send out → delivered), note for the customer, cancel, items with cake messages, call and map buttons, history |
+| Kitchen list | Day by day: everything to bake added up, then each order by delivery slot |
+| Stock | Running low / all / hidden, +10 and steppers per size, show or hide a product |
+| Messages | Contact form inbox: email or call back, mark handled |
+
+New orders and contact messages arrive as push notifications on every phone signed in to an admin
+account; tapping one opens that order or the inbox. With the app open, a new order also shows a toast.
+Products, coupons, classes and customers are edited on the website at `/admin`.
+
 ## How it works
 
 - **Sign-in:** the API returns tokens to the app (`X-Client: mobile`). The refresh token is stored in
@@ -40,7 +58,8 @@ A real phone can't reach `localhost` on your computer: use your computer's Wi-Fi
   store builds without extra native setup. The API confirms the payment with Razorpay before the
   order counts as paid.
 - **Push notifications:** after sign-in the app registers its Expo push token with the API, which sends
-  a notification on every order status change. Tapping it opens that order. This needs a physical
+  a notification on every order status change. Tapping it opens that order. Admin phones also get
+  "New order" and "Message from…" notifications. This needs a physical
   phone and an EAS project id (`npx eas init` adds it to `app.json`).
 - **Haptics:** light taps on choices, a firmer one on "Add to cart", success/warning on results.
 - **Dark mode:** follows the phone, or choose Light/Dark in Settings.

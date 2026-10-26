@@ -21,7 +21,7 @@ export async function registerForPush(): Promise<"ok" | "denied" | "unavailable"
   if (Platform.OS === "web" || !Device.isDevice) return "unavailable";
   if (Platform.OS === "android") {
     await Notifications.setNotificationChannelAsync("orders", {
-      name: "Order updates",
+      name: "Orders",
       importance: Notifications.AndroidImportance.HIGH,
       lightColor: "#C8893B",
     });
@@ -55,6 +55,8 @@ export function listenForNotificationTaps() {
   const open = (data: Record<string, unknown> | undefined) => {
     if (data?.screen === "order" && typeof data.id === "string") router.push({ pathname: "/order/[id]", params: { id: data.id } });
     if (data?.screen === "booking") router.push("/bookings");
+    if (data?.screen === "staff-order" && typeof data.id === "string") router.push({ pathname: "/staff/order/[id]", params: { id: data.id } });
+    if (data?.screen === "staff-messages") router.push("/staff/messages");
   };
   Notifications.getLastNotificationResponseAsync().then((r) => r && open(r.notification.request.content.data));
   const sub = Notifications.addNotificationResponseReceivedListener((r) => open(r.notification.request.content.data));
