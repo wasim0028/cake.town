@@ -7,7 +7,7 @@ Fresh baked happiness, delivered. A bakery shop with a web app, a mobile app and
 | `backend/` | Express 5 + TypeScript + MongoDB API | ✅ Phase A |
 | `packages/shared/` | Types, zod schemas, constants and money helpers used by all apps | ✅ Phase A |
 | `client/` | Next.js web app | ✅ Phases B–C |
-| `mobile/` | Expo (React Native) app | ⏳ Phase D |
+| `mobile/` | Expo app for Android and iPhone | ✅ Phase D (`mobile` branch) |
 | `legacy/` | The original Express server and React app, kept for reference | — |
 
 **Stack:** Next.js · Expo · Express · MongoDB Atlas · Cloudinary · Razorpay · Upstash Redis · Resend · MSG91 · Expo Push
@@ -23,6 +23,7 @@ cp client/.env.example client/.env.local
 npm run seed                             # sample catalogue + admin user
 npm run dev:api                          # API → http://localhost:5000/health
 npm run dev:web                          # in a second terminal → http://localhost:3000
+npm run dev:mobile                       # the app, with Expo Go
 npm test                                 # 52 API tests
 ```
 
@@ -45,6 +46,8 @@ Point `MONGODB_URI` at the existing database and run `npm run migrate:users` onc
   preview, sign-up/login/password reset, checkout (saved addresses, delivery slots, coupons, COD and
   Razorpay), live order tracking, account (profile, orders, favourites, addresses, classes), class
   booking, about, contact, help, recipes, privacy, terms, sitemap.
-- **D. Mobile app:** Expo screens, gestures, haptics, push notifications.
+- **D. Mobile app** ✅ animated splash, onboarding, home, menu, product, cake designer, cart with
+  swipe-to-remove, email/OTP sign-in, checkout with Razorpay, live order tracking, classes, account,
+  dark mode, haptics, push notifications. See [mobile/README.md](mobile/README.md).
 - **E. Admin dashboard + notification flows.**
 - **F. Polish:** SEO, accessibility, Lighthouse, deployment guide.

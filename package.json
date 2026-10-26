@@ -6,6 +6,7 @@
   "workspaces": [
     "backend",
     "client",
+    "mobile",
     "packages/*"
   ],
   "engines": {
@@ -21,6 +22,7 @@
     "typecheck": "npm run typecheck --workspaces --if-present",
     "dev:web": "npm run dev -w @caketown/web",
     "build:web": "npm run build -w @caketown/web",
-    "start:web": "npm run start -w @caketown/web"
+    "start:web": "npm run start -w @caketown/web",
+    "dev:mobile": "npm run start -w @caketown/mobile"
   }
 }
