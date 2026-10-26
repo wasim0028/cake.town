@@ -54,7 +54,10 @@ async function request<T>(path: string, opts: Options, retried = false): Promise
   if (res.ok) return data as T;
 
   const err = data?.error ?? {};
-  if (res.status === 401 && err.code === "TOKEN_EXPIRED" && !retried && (await refreshSession())) {
+  // TOKEN_EXPIRED: the access cookie is stale. UNAUTHORIZED: it already lapsed and the browser
+  // dropped it. Either way, one silent refresh with the long-lived cookie, then retry.
+  const lapsed = err.code === "TOKEN_EXPIRED" || (err.code === "UNAUTHORIZED" && !path.startsWith("/auth/"));
+  if (res.status === 401 && lapsed && !retried && (await refreshSession())) {
     return request<T>(path, opts, true);
   }
   throw new ApiError(

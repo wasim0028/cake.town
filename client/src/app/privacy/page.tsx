@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/site";
 import { Prose } from "@/components/content/Prose";
 import { PageHeader } from "@/components/layout/PageHeader";
 
-export const metadata: Metadata = { title: "Privacy policy", alternates: { canonical: "/privacy" } };
+export const metadata: Metadata = pageMeta({ title: "Privacy policy", description: "What caketown collects when you order, why, and how to ask us to change or delete it.", path: "/privacy" });
 
 export default function PrivacyPage() {
   return (

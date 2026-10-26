@@ -11,23 +11,22 @@ import { Toaster } from "@/components/ui/Toaster";
 import { dmSans, fraunces } from "./fonts";
 import "@/styles/globals.css";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
+  metadataBase: new URL(SITE.url),
   title: {
     default: "caketown · Fresh baked happiness, delivered",
     template: "%s · caketown",
   },
-  description:
-    "Cakes made to order, breads and pastries baked every morning, delivered in a three-hour slot you choose. Eggless options on most cakes.",
+  description: SITE.description,
   applicationName: "caketown",
   openGraph: {
     type: "website",
     siteName: "caketown",
     locale: "en_IN",
     title: "caketown · Fresh baked happiness, delivered",
-    description: "Cakes made to order, breads and pastries baked every morning, delivered in a slot you choose.",
+    description: SITE.description,
   },
   twitter: { card: "summary_large_image" },
 };

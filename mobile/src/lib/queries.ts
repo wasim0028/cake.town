@@ -40,4 +40,4 @@ export const useOrder = (id: string) =>
 export const useAddresses = (enabled = true) => useQuery({ queryKey: ["addresses"], queryFn: () => api.get<{ items: Address[] }>("/me/addresses").then((r) => r.items), enabled });
 export const useWishlist = (enabled = true) => useQuery({ queryKey: ["wishlist"], queryFn: () => api.get<{ items: Product[] }>("/me/wishlist").then((r) => r.items), enabled });
 export const useBookings = (enabled = true) => useQuery({ queryKey: ["bookings"], queryFn: () => api.get<{ items: Booking[] }>("/me/bookings").then((r) => r.items), enabled });
-export const useConfig = () => useQuery({ queryKey: ["config"], queryFn: () => api.get<{ payments: { razorpay: boolean; cod: boolean } }>("/config"), staleTime: 5 * 60_000 });
+export const useConfig = () => useQuery({ queryKey: ["config"], queryFn: () => api.get<{ payments: { razorpay: boolean; cod: boolean }; sms: boolean }>("/config"), staleTime: 5 * 60_000 });

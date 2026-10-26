@@ -95,18 +95,42 @@ export async function login(req: Request, res: Response) {
   return issueSession(req, res, user);
 }
 
+/** Rotate: remove the used refresh token in the same atomic step that finds it, so it can't be reused. */
+function useRefreshToken(token: string) {
+  const hash = sha256(token);
+  return User.findOneAndUpdate(
+    { sessions: { $elemMatch: { tokenHash: hash, expiresAt: { $gt: new Date() } } } },
+    { $pull: { sessions: { tokenHash: hash } } },
+    { new: true },
+  );
+}
+
+/**
+ * Who is signed in, for the website on page load. Never answers 401: guests get `{ user: null }`
+ * (so browsers don't log an error for every visitor). If the 15-minute access cookie has lapsed
+ * but the refresh cookie is still good, the session is renewed in the same call, so people stay
+ * signed in across visits instead of looking signed out after a quarter of an hour.
+ */
+export async function session(req: Request, res: Response) {
+  if (req.user) {
+    const user = await User.findById(req.user.id);
+    if (user) return res.json({ user: presentUser(user), expiresIn: accessTtlSeconds() });
+  }
+  const token = req.cookies?.[REFRESH_COOKIE] as string | undefined;
+  if (token) {
+    const user = await useRefreshToken(token);
+    if (user) return issueSession(req, res, user);
+    clearAuthCookies(res);
+  }
+  res.json({ user: null });
+}
+
 export async function refresh(req: Request, res: Response) {
   const body = parse(refreshSchema, req.body ?? {});
   const token = body.refreshToken ?? req.cookies?.[REFRESH_COOKIE];
   if (!token) throw unauthorized("Please log in again", "NO_REFRESH_TOKEN");
 
-  const hash = sha256(token);
-  // Rotate: remove the used token in the same atomic step that finds it, so it can't be reused.
-  const user = await User.findOneAndUpdate(
-    { sessions: { $elemMatch: { tokenHash: hash, expiresAt: { $gt: new Date() } } } },
-    { $pull: { sessions: { tokenHash: hash } } },
-    { new: true },
-  );
+  const user = await useRefreshToken(token);
   if (!user) {
     clearAuthCookies(res);
     throw unauthorized("Please log in again", "INVALID_REFRESH_TOKEN");

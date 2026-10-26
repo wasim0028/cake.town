@@ -52,7 +52,7 @@
 }
 .level[data-level="intermediate"] {
   background: color-mix(in srgb, var(--accent) 22%, transparent);
-  color: var(--accent-display);
+  color: var(--link); /* --accent-display is 3.5:1 on this tint; --link passes AA */
 }
 .level[data-level="advanced"] {
   background: var(--text);

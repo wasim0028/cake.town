@@ -1,15 +1,12 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/site";
 import Link from "next/link";
 import { BakeArt } from "@/components/art/BakeArt";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { POSTS } from "@/lib/posts";
 import styles from "../content.module.css";
 
-export const metadata: Metadata = {
-  title: "Recipes & notes",
-  description: "Storage tips, how we bake, and guides from the caketown kitchen.",
-  alternates: { canonical: "/blog" },
-};
+export const metadata: Metadata = pageMeta({ title: "Recipes & notes", description: "Storage tips, how we bake, and guides from the caketown kitchen.", path: "/blog" });
 
 const fmt = new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "long", year: "numeric" });
 

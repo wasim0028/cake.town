@@ -239,6 +239,8 @@ export function ShopView({ categories, category, initial }: { categories: Catego
         </div>
       ) : (
         <>
+          {/* Keeps the heading outline h1 → h2 → h3 (product names are h3). */}
+          <h2 className="visually-hidden">Products</h2>
           <ul role="list" className={styles.grid}>
             {products.map((p, i) => (
               <li key={p.id} className={styles.cell} style={{ "--i": i % LIMIT } as React.CSSProperties}>

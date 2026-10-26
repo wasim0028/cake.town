@@ -24,11 +24,12 @@ npm run seed                             # sample catalogue + admin user
 npm run dev:api                          # API → http://localhost:5000/health
 npm run dev:web                          # in a second terminal → http://localhost:3000
 npm run dev:mobile                       # the app, with Expo Go
-npm test                                 # 59 API tests
+npm test                                 # 62 API tests
 ```
 
 Every external service is optional and switches on when its keys are added to `backend/.env`.
-See [backend/README.md](backend/README.md) for the API reference and [client/README.md](client/README.md) for the design system and animations.
+See [backend/README.md](backend/README.md) for the API reference, [client/README.md](client/README.md) for the design system and animations,
+and **[DEPLOY.md](DEPLOY.md) to put the shop online** (Vercel, Render, MongoDB Atlas, Expo EAS).
 
 ### Admin
 
@@ -62,4 +63,9 @@ Point `MONGODB_URI` at the existing database and run `npm run migrate:users` onc
   browser tab within 30 seconds.
   In the app, admins get a **Staff** section: new-order push notifications, today's numbers, orders
   with one-tap status changes, the kitchen list, stock and visibility switches, and the inbox.
-- **F. Polish:** SEO, accessibility, Lighthouse, deployment guide.
+- **F. Polish** ✅ search engines (titles, descriptions and canonical links on every page, share
+  images drawn per product, sitemap of every product, robots, structured data for the bakery,
+  products, breadcrumbs, class dates as events and recipes), accessibility (axe: no WCAG 2.2 AA
+  issues on any public or admin page, light and dark, phone and desktop), speed (CSS-only drawers,
+  smooth scroll loaded after the page, first paint not held back by animations), people stay signed
+  in across visits, and a step-by-step [deployment guide](DEPLOY.md).

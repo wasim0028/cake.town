@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BookingPanel } from "@/components/classes/Classes";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { getClass } from "@/lib/server-api";
+import { abs, pageMeta, SITE } from "@/lib/site";
+import { fromPaise } from "@caketown/shared";
 import styles from "../classes.module.css";
 
 export const revalidate = 60;
@@ -13,7 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const c = await getClass(slug);
   if (!c) return { title: "Not found" };
-  return { title: c.title, description: c.description.slice(0, 155), alternates: { canonical: `/classes/${c.slug}` } };
+  return pageMeta({ title: c.title, description: c.description.slice(0, 155), path: `/classes/${c.slug}`, image: c.image ? { url: c.image.url, alt: c.title } : undefined });
 }
 
 export default async function ClassPage({ params }: Props) {
@@ -21,8 +24,31 @@ export default async function ClassPage({ params }: Props) {
   const c = await getClass(slug);
   if (!c) notFound();
   const hours = Math.round((c.durationMinutes / 60) * 10) / 10;
+  // Each date is a bookable in-person event: Google can show these as event listings.
+  const events = c.sessions.map((s) => ({
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: `${c.title} · caketown baking class`,
+    description: c.description.slice(0, 300),
+    startDate: s.startsAt,
+    endDate: new Date(new Date(s.startsAt).getTime() + c.durationMinutes * 60_000).toISOString(),
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    eventStatus: "https://schema.org/EventScheduled",
+    location: { "@type": "Place", name: c.location, address: { "@type": "PostalAddress", ...(SITE.address ? { streetAddress: SITE.address } : {}), addressLocality: SITE.city, addressCountry: "IN" } },
+    ...(c.image ? { image: [c.image.url] } : {}),
+    organizer: { "@type": "Organization", name: SITE.name, url: SITE.url },
+    performer: { "@type": "Person", name: c.instructor.name },
+    offers: {
+      "@type": "Offer",
+      url: abs(`/classes/${c.slug}`),
+      price: fromPaise(c.price),
+      priceCurrency: "INR",
+      availability: s.seatsLeft > 0 ? "https://schema.org/InStock" : "https://schema.org/SoldOut",
+    },
+  }));
   return (
     <>
+      {events.length > 0 && <JsonLd data={events} />}
       <PageHeader title={c.title} crumbs={[{ href: "/classes", label: "Baking classes" }, { href: `/classes/${c.slug}`, label: c.title }]} compact>
         <p className={styles.facts} style={{ marginTop: "1rem" }}>
           <span>

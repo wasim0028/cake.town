@@ -34,7 +34,12 @@
   margin: -0.04em 0 -0.08em;
 }
 
-/* Dough rising: each line lifts into place while the letters soften and fill out. */
+/*
+ * Dough rising: each line lifts and the letters soften like proving dough. The words are on screen
+ * from the very first frame (they start just low, not hidden), so the headline paints immediately
+ * and counts as the page's main content for Core Web Vitals. Weight isn't animated: changing it
+ * reflows the text on every frame.
+ */
 .line > span {
   display: inline-block;
   animation: rise 1.1s var(--ease-out) both;
@@ -42,17 +47,15 @@
 }
 @keyframes rise {
   from {
-    transform: translateY(105%);
+    transform: translateY(0.32em);
     font-variation-settings: "SOFT" 0, "WONK" 0, "opsz" 144;
-    font-weight: 300;
   }
   60% {
-    transform: translateY(-2%);
+    transform: translateY(-0.03em);
   }
   to {
     transform: none;
     font-variation-settings: "SOFT" 100, "WONK" 0, "opsz" 144;
-    font-weight: 600;
   }
 }
 
@@ -63,7 +66,7 @@
 .lede {
   margin-top: var(--s-5);
   max-width: 42ch;
-  animation: rise-in 800ms 520ms var(--ease-out) both;
+  animation: lift-in 800ms 520ms var(--ease-out) both;
 }
 
 .ctas {
@@ -71,7 +74,14 @@
   flex-wrap: wrap;
   gap: var(--s-3);
   margin-top: var(--s-6);
-  animation: rise-in 800ms 640ms var(--ease-out) both;
+  animation: lift-in 800ms 640ms var(--ease-out) both;
+}
+/* Like rise-in, but never fully transparent, so the text counts as painted from the first frame. */
+@keyframes lift-in {
+  from {
+    opacity: 0.2;
+    transform: translate3d(0, 14px, 0);
+  }
 }
 
 .art {

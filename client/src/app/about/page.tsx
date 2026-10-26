@@ -1,15 +1,12 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/site";
 import Image from "next/image";
 import { BakeArt } from "@/components/art/BakeArt";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Button } from "@/components/ui/Button";
 import styles from "../content.module.css";
 
-export const metadata: Metadata = {
-  title: "Our story",
-  description: "How caketown bakes: cakes made after you order, bread fermented slowly, and delivery in a slot you choose.",
-  alternates: { canonical: "/about" },
-};
+export const metadata: Metadata = pageMeta({ title: "Our story", description: "How caketown bakes: cakes made after you order, bread fermented slowly, and delivery in a slot you choose.", path: "/about" });
 
 const PRINCIPLES = [
   { art: ["Chocolate Truffle Cake", "cakes"], title: "Baked after you order", body: "Cakes aren't sitting in a display fridge waiting for you. We start yours when the order comes in, timed to your delivery slot." },

@@ -6,6 +6,7 @@ import { Screen } from "@/components/Screen";
 import { Button, Field, FormError, H, T } from "@/components/ui";
 import { api, errorsFrom } from "@/lib/api";
 import { afterAuth, signedIn } from "@/lib/auth";
+import { useConfig } from "@/lib/queries";
 import { haptic } from "@/lib/haptics";
 import { toast } from "@/lib/stores";
 
@@ -16,6 +17,8 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [errors, setErrors] = useState<{ fields: Record<string, string>; message?: string }>({ fields: {} });
+  // Codes are sent by SMS, so the option only appears once the shop has SMS set up.
+  const sms = useConfig().data?.sms ?? false;
 
   const submit = async () => {
     setBusy(true);
@@ -45,7 +48,7 @@ export default function Login() {
         <Field label="Password" value={password} onChangeText={setPassword} secureTextEntry autoComplete="current-password" textContentType="password" error={errors.fields.password} onSubmitEditing={submit} returnKeyType="go" />
         <FormError message={errors.message} />
         <Button title="Sign in" size="lg" loading={busy} onPress={submit} />
-        <Button title="Use a one-time code instead" variant="secondary" onPress={() => router.replace({ pathname: "/otp", params: next ? { next } : {} })} />
+        {sms && <Button title="Use a one-time code instead" variant="secondary" onPress={() => router.replace({ pathname: "/otp", params: next ? { next } : {} })} />}
         <T tone="muted" style={{ textAlign: "center", marginTop: 8 }}>
           New to caketown?{" "}
           <T tone="accent" weight="semi" onPress={() => router.replace({ pathname: "/signup", params: next ? { next } : {} })} accessibilityRole="link">

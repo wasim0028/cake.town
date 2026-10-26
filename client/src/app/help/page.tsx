@@ -1,15 +1,12 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/site";
 import Link from "next/link";
 import { DELIVERY, formatINR } from "@caketown/shared";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Accordion } from "@/components/ui/form";
 import styles from "../content.module.css";
 
-export const metadata: Metadata = {
-  title: "Help & questions",
-  description: "Delivery slots, eggless options, payments, cancellations and refunds at caketown.",
-  alternates: { canonical: "/help" },
-};
+export const metadata: Metadata = pageMeta({ title: "Help & questions", description: "Delivery slots, eggless options, payments, cancellations and refunds at caketown.", path: "/help" });
 
 const GROUPS = [
   {

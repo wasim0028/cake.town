@@ -1,6 +1,6 @@
 "use client";
 
-import Lenis from "lenis";
+import type Lenis from "lenis";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
@@ -25,10 +25,11 @@ export function SmoothScroll() {
     let tick: ((time: number) => void) | null = null;
 
     (async () => {
-      const [{ gsap }, { ScrollTrigger }] = await Promise.all([import("gsap"), import("gsap/ScrollTrigger")]);
+      // Loaded after hydration so smooth scrolling never delays the first paint.
+      const [{ gsap }, { ScrollTrigger }, { default: LenisCtor }] = await Promise.all([import("gsap"), import("gsap/ScrollTrigger"), import("lenis")]);
       if (cancelled) return;
       gsap.registerPlugin(ScrollTrigger);
-      lenis = new Lenis({ lerp: 0.12, wheelMultiplier: 1 });
+      lenis = new LenisCtor({ lerp: 0.12, wheelMultiplier: 1 });
       lenis.on("scroll", ScrollTrigger.update);
       tick = (time: number) => lenis?.raf(time * 1000);
       gsap.ticker.add(tick);
