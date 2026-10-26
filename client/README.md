@@ -52,6 +52,21 @@ custom cursor don't start, and content is never hidden waiting for an animation.
 | `/classes`, `/classes/[slug]` | Dates with seats left, booking (pay at the studio or online) |
 | `/login`, `/signup`, `/forgot-password`, `/reset-password` | Accounts |
 | `/about`, `/contact`, `/help`, `/blog`, `/privacy`, `/terms` | Content. Replace the wording in `about`, `privacy` and `terms` with your own before launch. |
+| `/admin/*` | Admin dashboard (admin accounts only; not indexed). The shop navbar, footer and cart are hidden here. |
+
+### Admin dashboard
+
+| Route | What |
+|---|---|
+| `/admin` | Today, 7- and 30-day revenue, revenue per day chart (with a table view), orders by status, today's deliveries, low stock, top sellers |
+| `/admin/orders`, `/admin/orders/[id]` | Filter by status, search, delivery dates; move an order along (each change notifies the customer), cancel, refund online payments, print |
+| `/admin/kitchen` | Everything to bake for a day, totalled, then each order by delivery slot. Prints cleanly. |
+| `/admin/products`, `/admin/products/[id]` | Filters (in the shop, hidden, low stock, category); editor for sizes, prices, stock, photos, flavours, eggless, builder, visibility |
+| `/admin/categories`, `/admin/coupons`, `/admin/classes` | Create and edit in a side panel. Classes include dates, seats and the bookings list. |
+| `/admin/customers`, `/admin/reviews`, `/admin/messages` | Orders and spend per customer, admin roles; hide reviews; contact inbox |
+
+Photos upload through `POST /admin/uploads` to Cloudinary. Before Cloudinary keys are set, paste an
+image link instead. The sidebar polls for new orders every 30 seconds and shows a toast when one arrives.
 
 **Cart:** guests keep their cart in the browser. At checkout it is copied into their account with one
 `PUT /cart` call; the server re-prices everything and drops anything no longer available (and says why).
@@ -64,8 +79,9 @@ with Razorpay before confirming; if the window is closed, the order is held for 
 
 ```
 src/
-  app/            layout, page (home), template (page transition), not-found, fonts, icon
+  app/            layout, page (home), template (page transition), not-found, fonts, icon; admin/ for the dashboard
   components/
+    admin/        AdminShell, kit (tables, badges, filters), RevenueChart, Drawer, ImagePicker and one file per page
     art/          BakeArt (product drawings), HeroCake
     home/         Hero, NextSlot, HeroParallax, Sections (trust strip, bestsellers, categories, kitchen), Newsletter
     layout/       Navbar, Footer, CartDrawer, Wordmark, Theme toggle, SmoothScroll, Cursor, Reveal

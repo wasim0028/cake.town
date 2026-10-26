@@ -161,7 +161,23 @@ export async function listUsers(req: Request, res: Response) {
     User.find(filter).sort({ createdAt: -1 }).skip((page - 1) * limit).limit(limit),
     User.countDocuments(filter),
   ]);
-  res.json(paginate(users.map(presentUser), total, page, limit));
+  // Order count and lifetime spend for the customers on this page (paid or cash orders that went ahead).
+  const stats = await Order.aggregate<{ _id: unknown; orders: number; spent: number; last: Date }>([
+    { $match: { user: { $in: users.map((u) => u._id) }, status: { $nin: ["cancelled", "pending_payment"] } } },
+    { $group: { _id: "$user", orders: { $sum: 1 }, spent: { $sum: "$total" }, last: { $max: "$createdAt" } } },
+  ]);
+  const by = new Map(stats.map((s) => [String(s._id), s]));
+  res.json(
+    paginate(
+      users.map((u) => {
+        const s = by.get(String(u._id));
+        return { ...presentUser(u), orders: s?.orders ?? 0, spent: s?.spent ?? 0, ...(s ? { lastOrderAt: s.last } : {}) };
+      }),
+      total,
+      page,
+      limit,
+    ),
+  );
 }
 
 export async function updateUserRole(req: Request, res: Response) {

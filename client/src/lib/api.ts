@@ -22,7 +22,7 @@ type Json = Record<string, unknown> | unknown[];
 
 interface Options {
   method?: "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
-  body?: Json;
+  body?: Json | FormData;
   signal?: AbortSignal;
 }
 
@@ -42,8 +42,9 @@ async function request<T>(path: string, opts: Options, retried = false): Promise
   const res = await fetch(`/api/v1${path}`, {
     method: opts.method ?? "GET",
     credentials: "include",
-    headers: opts.body ? { "Content-Type": "application/json" } : undefined,
-    body: opts.body ? JSON.stringify(opts.body) : undefined,
+    // FormData sets its own multipart boundary header.
+    headers: opts.body && !(opts.body instanceof FormData) ? { "Content-Type": "application/json" } : undefined,
+    body: opts.body instanceof FormData ? opts.body : opts.body ? JSON.stringify(opts.body) : undefined,
     signal: opts.signal,
   });
 
@@ -69,5 +70,6 @@ export const api = {
   post: <T>(path: string, body?: Json) => request<T>(path, { method: "POST", body }),
   patch: <T>(path: string, body?: Json) => request<T>(path, { method: "PATCH", body }),
   put: <T>(path: string, body?: Json) => request<T>(path, { method: "PUT", body }),
-  del: <T>(path: string) => request<T>(path, { method: "DELETE" }),
+  del: <T>(path: string, body?: Json) => request<T>(path, { method: "DELETE", body }),
+  upload: <T>(path: string, form: FormData) => request<T>(path, { method: "POST", body: form }),
 };

@@ -1,0 +1,113 @@
+.wrap {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--s-3);
+  min-width: 0;
+}
+.legend {
+  font-weight: 600;
+  font-size: 0.92rem;
+  margin-bottom: var(--s-2);
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--s-3);
+}
+.thumb {
+  position: relative;
+  margin: 0;
+  display: grid;
+  gap: 6px;
+  animation: pop-in 240ms var(--ease-out) both;
+}
+.thumb img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: var(--r-sm);
+  background: var(--plate);
+}
+.cover {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  padding: 1px 8px;
+  border-radius: var(--r-pill);
+  background: var(--inverse-bg);
+  color: var(--inverse-text);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+.tools {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: flex;
+  gap: 4px;
+}
+.tools button {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-1);
+}
+.tools button:disabled {
+  opacity: 0.4;
+}
+.alt {
+  width: 100%;
+  font: inherit;
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--text);
+}
+.add {
+  aspect-ratio: 1;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 4px;
+  padding: var(--s-2);
+  text-align: center;
+  border: 1.5px dashed var(--line-strong);
+  border-radius: var(--r-sm);
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.88rem;
+  transition: border-color var(--t-fast), color var(--t-fast);
+}
+.add:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+.urlRow {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  color: var(--text-muted);
+}
+.error {
+  color: var(--danger);
+  font-size: 0.88rem;
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .thumb {
+    animation: none;
+  }
+}

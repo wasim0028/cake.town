@@ -1,0 +1,104 @@
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: var(--s-2);
+}
+.back:hover {
+  color: var(--text);
+}
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: var(--s-4);
+  align-items: start;
+}
+.col {
+  display: grid;
+  gap: var(--s-4);
+  min-width: 0;
+}
+/* Save bar sticks to the bottom of the screen so it's always one click away. */
+.saveBar {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  margin-top: var(--s-5);
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-2);
+  display: grid;
+  gap: var(--s-2);
+}
+.saveInner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-3);
+}
+.spacer {
+  flex: 1;
+}
+.variants {
+  display: grid;
+  gap: var(--s-2);
+  overflow-x: auto;
+}
+.vHead,
+.vRow {
+  display: grid;
+  grid-template-columns: minmax(90px, 1.3fr) minmax(70px, 0.8fr) minmax(80px, 1fr) minmax(70px, 0.8fr) minmax(64px, 0.7fr) minmax(80px, 1fr) 36px;
+  gap: var(--s-2);
+  align-items: center;
+  min-width: 600px;
+}
+.vHead {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+.vRow {
+  animation: fade-in 200ms var(--ease-out) both;
+}
+.iconBtn {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: var(--text-muted);
+}
+.iconBtn:hover:not(:disabled) {
+  background: var(--plate);
+  color: var(--danger);
+}
+.iconBtn:disabled {
+  opacity: 0.3;
+}
+.err {
+  color: var(--danger);
+  font-size: 0.88rem;
+}
+.row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-3);
+}
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 560px) {
+  .row2 {
+    grid-template-columns: 1fr;
+  }
+}
+/* Keep focused fields from hiding under the sticky save bar when tabbing. */
+:global(html):has(.saveBar) {
+  scroll-padding-bottom: 110px;
+}

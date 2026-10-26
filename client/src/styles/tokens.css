@@ -53,6 +53,7 @@
   --overlay: rgb(31 22 17 / 0.45);
   --nav-glass: rgb(247 241 231 / 0.78);
   --sheen: rgb(255 253 248 / 0.55);
+  --chart-1: #a86a22; /* validated: L band + 3:1 on light surface */
 
   /* type */
   --font-display-stack: var(--font-display), "Iowan Old Style", Georgia, serif;
@@ -132,6 +133,7 @@
     --overlay: rgb(0 0 0 / 0.6);
     --nav-glass: rgb(23 17 13 / 0.78);
     --sheen: rgb(255 255 255 / 0.06);
+    --chart-1: #b8782f; /* validated on the dark surface */
     color-scheme: dark;
   }
 }
@@ -159,5 +161,6 @@
   --overlay: rgb(0 0 0 / 0.6);
   --nav-glass: rgb(23 17 13 / 0.78);
   --sheen: rgb(255 255 255 / 0.06);
+  --chart-1: #b8782f;
   color-scheme: dark;
 }

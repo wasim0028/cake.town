@@ -1,0 +1,211 @@
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: var(--s-4);
+  flex-wrap: wrap;
+  margin-bottom: var(--s-5);
+}
+.title h1 {
+  font-size: var(--step-4);
+}
+.title p {
+  margin-top: var(--s-1);
+}
+.actions {
+  display: flex;
+  gap: var(--s-2);
+  flex-wrap: wrap;
+}
+
+.panel {
+  display: grid;
+  gap: var(--s-4);
+  align-content: start;
+  padding: var(--s-5);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+.panelHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-3);
+}
+.panelHead h2 {
+  font-size: var(--step-1);
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px;
+  border-radius: var(--r-pill);
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  background: var(--plate);
+  color: var(--text-muted);
+}
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.status[data-tone="good"] {
+  background: var(--tag-fresh-bg);
+  color: var(--tag-fresh-text);
+}
+.status[data-tone="accent"] {
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+  color: var(--accent-display);
+}
+.status[data-tone="info"] {
+  background: var(--text);
+  color: var(--bg);
+}
+.status[data-tone="warn"] {
+  background: color-mix(in srgb, #d9a34a 26%, transparent);
+  color: var(--link);
+}
+.status[data-tone="bad"] {
+  background: color-mix(in srgb, var(--danger) 16%, transparent);
+  color: var(--danger);
+}
+
+.tableWrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+}
+.table {
+  width: 100%;
+  min-width: 720px; /* scroll sideways on phones rather than squeeze columns */
+  border-collapse: collapse;
+  font-size: 0.93rem;
+}
+.table th {
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  padding: var(--s-3) var(--s-4);
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+  background: var(--bg);
+}
+.table td {
+  padding: var(--s-3) var(--s-4);
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+.table tbody tr:last-child td {
+  border-bottom: 0;
+}
+.table tbody tr:hover td {
+  background: color-mix(in srgb, var(--plate) 50%, transparent);
+}
+.table :global(.num) {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.table a:not(:global(.btn)) {
+  font-weight: 600;
+}
+.table a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.empty {
+  text-align: center;
+  color: var(--text-muted);
+  padding: var(--s-7) var(--s-4) !important;
+}
+.loadingRow span {
+  display: block;
+  height: 18px;
+  border-radius: var(--r-sm);
+  background: var(--plate);
+  animation: fade-in 900ms var(--ease-in-out) infinite alternate;
+}
+
+.pager {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--s-2);
+  margin-top: var(--s-3);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+.pager button {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+}
+.pager button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  align-items: center;
+  margin-bottom: var(--s-4);
+}
+.toolbar input,
+.toolbar select {
+  min-height: 42px;
+}
+
+.segmented {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--r-pill);
+  background: var(--plate);
+}
+.segmented button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--r-pill);
+  font-size: 0.88rem;
+  font-weight: 550;
+  color: var(--text-muted);
+}
+.segmented button[aria-checked="true"] {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-1);
+}
+.segmented button span {
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.75;
+}
+
+@media (max-width: 640px) {
+  .segmented {
+    flex-wrap: nowrap;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .segmented button {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+}

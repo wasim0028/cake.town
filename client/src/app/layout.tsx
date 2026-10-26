@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Providers } from "@/components/Providers";
 import { CartDrawer } from "@/components/layout/CartDrawer";
+import { ShopChrome } from "@/components/layout/ShopChrome";
 import { Cursor } from "@/components/layout/Cursor";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
@@ -49,12 +50,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Providers>
           <SmoothScroll />
-          <Navbar />
+          <ShopChrome>
+            <Navbar />
+          </ShopChrome>
           <main id="main" tabIndex={-1}>
             {children}
           </main>
-          <Footer />
-          <CartDrawer />
+          <ShopChrome>
+            <Footer />
+            <CartDrawer />
+          </ShopChrome>
           <Toaster />
           <Cursor />
         </Providers>

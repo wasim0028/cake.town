@@ -115,12 +115,13 @@ after `PAYMENT_HOLD_MINUTES`; a payment that arrives after that is refunded auto
 | `GET /orders` | `?status=&q=<order no, name, phone>&from=&to=` (delivery date) |
 | `PATCH /orders/:id/status` | `{ status, note? }` placed → baking → out_for_delivery → delivered, or cancelled. Sends email + SMS + push. |
 | `POST /orders/:id/refund` | `{ amount?, reason? }` partial or full |
-| `GET/POST /products`, `GET/PATCH/DELETE /products/:id` | send variant `id`s when editing to keep carts working; products with orders are hidden, not deleted |
-| `POST /categories`, `PATCH/DELETE /categories/:id` | |
-| `PATCH /reviews/:id` | `{ isHidden }` |
+| `GET/POST /products`, `GET/PATCH/DELETE /products/:id` | list: `?q=&category=<id>&status=active\|hidden\|low`. Send variant `id`s when editing to keep carts working; products with orders are hidden, not deleted |
+| `GET/POST /categories`, `PATCH/DELETE /categories/:id` | the list includes hidden categories and a `productCount` |
+| `GET /reviews`, `PATCH /reviews/:id` | list: `?hidden=true\|false&rating=1-5`; patch `{ isHidden }` |
+| `GET /messages`, `PATCH /messages/:id` | contact inbox: `?handled=true\|false` (response includes `open`, the unhandled count); patch `{ handled }` |
 | `GET/POST /classes`, `PATCH/DELETE /classes/:id`, `GET /bookings`, `POST /bookings/:id/cancel` | |
 | `GET/POST /coupons`, `PATCH/DELETE /coupons/:id` | percent (1–100) or flat (paise); min order, max discount, usage and per-customer limits |
-| `GET /users`, `PATCH /users/:id/role` | |
+| `GET /users`, `PATCH /users/:id/role` | `?q=<name, email, phone>`; each user carries `orders`, `spent` and `lastOrderAt`. You can't remove your own admin role. |
 | `POST /uploads?folder=products` | multipart field `images` (up to 6, 5 MB each) → `{ images: [{ url, publicId, width, height }] }` |
 | `DELETE /uploads` | `{ publicId }` |
 
